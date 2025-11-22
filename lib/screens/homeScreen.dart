@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:gym_manager/const/colors.dart';
-
+import 'package:gym_manager/view_models/client_viewmodel.dart';
+import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
 import 'package:gym_manager/widgets/clients_bar_chart.dart';
 import 'package:gym_manager/widgets/revenue_line_chart.dart';
 import 'package:gym_manager/widgets/sidebar.dart';
 import 'package:gym_manager/widgets/stat_card.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  void initState() {
+    super.initState();
+
+    Provider.of<ClientViewModel>(context, listen: false).loadClients();
+    Provider.of<RevenueViewModel>(
+      context,
+      listen: false,
+    ).loadTodayRevenueToCounters();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +50,20 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      StatCard(title: "Total Clients", value: "120"),
+                      Consumer<ClientViewModel>(
+                        builder: (context, value, child) => StatCard(
+                          title: "Total Clients",
+                          value: value.clients.length.toString(),
+                        ),
+                      ),
                       StatCard(title: "Active", value: "95"),
                       StatCard(title: "Expired", value: "25"),
-                      StatCard(title: "Today Revenue", value: "8500 DA"),
+                      Consumer<RevenueViewModel>(
+                        builder: (context, revValue, child) => StatCard(
+                          title: "Today Revenue",
+                          value: revValue.total.toString() + " DA",
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 50),

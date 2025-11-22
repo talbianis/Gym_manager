@@ -42,14 +42,14 @@ class _ClientsScreenState extends State<ClientsScreen> {
               final daysLeft = client.endDate.difference(DateTime.now()).inDays;
 
               return Card(
-                color: daysLeft <= 3
+                color: daysLeft <= 5
                     ? Colors.red[100]
                     : Colors.greenAccent, // Expiry warning
                 margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: ListTile(
                   title: Text(client.name),
                   subtitle: Text(
-                    "Phone: ${client.phone}\nEnds: ${DateFormat('yyyy-MM-dd').format(client.endDate)}",
+                    "days left: ${daysLeft}\nPhone: ${client.phone}\nEnds: ${DateFormat('yyyy-MM-dd').format(client.endDate)}",
                   ),
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),

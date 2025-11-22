@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/revenue.dart';
 import '../database/db_helper.dart';
 
-class RevenueViewModel extends ChangeNotifier {
+class revenuview extends ChangeNotifier {
   List<Revenue> revenues = [];
 
   Future<void> loadRevenues() async {

@@ -12,7 +12,6 @@ class RevenueLineChart extends StatelessWidget {
       LineChartData(
         lineBarsData: [
           LineChartBarData(
-            isCurved: true,
             spots: data
                 .asMap()
                 .entries

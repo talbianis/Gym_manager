@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_manager/screens/homeScreen.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
-import 'package:gym_manager/view_models/revenueview.dart';
+import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
