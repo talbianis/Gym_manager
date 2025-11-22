@@ -24,4 +24,18 @@ class ClientViewModel extends ChangeNotifier {
     await db.delete("clients", where: "id = ?", whereArgs: [id]);
     await loadClients();
   }
+
+  void rechargeClient(Client client, DateTime newEndDate) async {
+    client.endDate = newEndDate; // update end date
+
+    final db = await DBHelper.database;
+    await db.update(
+      'clients',
+      client.toMap(),
+      where: 'id = ?',
+      whereArgs: [client.id],
+    );
+
+    notifyListeners();
+  }
 }

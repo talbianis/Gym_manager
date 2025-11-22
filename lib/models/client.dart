@@ -3,7 +3,7 @@ class Client {
   final String name;
   final String phone;
   final DateTime startDate;
-  final DateTime endDate;
+  DateTime endDate;
   final String subscriptionType;
 
   Client({
