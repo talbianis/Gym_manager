@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/widgets/add_client_dialog.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +27,12 @@ class _ClientsScreenState extends State<ClientsScreen> {
           final clients = clientVM.clients;
 
           if (clients.isEmpty) {
-            return Center(child: Text("No clients yet"));
+            return Center(
+              child: CircularProgressIndicator(
+                color: AppColor.mainColor,
+                strokeWidth: 6,
+              ),
+            );
           }
 
           return ListView.builder(
