@@ -18,11 +18,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     Provider.of<ClientViewModel>(context, listen: false).loadClients();
+
     Provider.of<RevenueViewModel>(
       context,
       listen: false,
     ).loadTodayRevenueToCounters();
   }
+
+  int get expiredCount => Provider.of<ClientViewModel>(
+    context,
+    listen: false,
+  ).expiredClients.length;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       StatCard(title: "Active", value: "95"),
-                      StatCard(title: "Expired", value: "25"),
+                      Consumer<ClientViewModel>(
+                        builder: (context, value, child) => StatCard(
+                          title: "Expired",
+                          value: value.expiredClients.length.toString(),
+                        ),
+                      ),
                       Consumer<RevenueViewModel>(
                         builder: (context, revValue, child) => StatCard(
                           title: "Today Revenue",
@@ -109,10 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           BoxShadow(color: Colors.black12, blurRadius: 6),
                         ],
                       ),
-                      child: ClientsBarChart(
-                        active: 30,
-                        expired: 20,
-                        total: 150,
+                      child: Consumer<ClientViewModel>(
+                        builder: (context, clientVM, child) => ClientsBarChart(
+                          active: 30,
+                          expired: 20,
+                          total: clientVM.clients.length.toString(),
+                        ),
                       ),
                     ),
                   ),

@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class ClientsBarChart extends StatelessWidget {
-  final int total;
+  final String total;
   final int active;
   final int expired;
 
@@ -19,7 +19,7 @@ class ClientsBarChart extends StatelessWidget {
         barGroups: [
           BarChartGroupData(
             x: 0,
-            barRods: [BarChartRodData(toY: total.toDouble())],
+            barRods: [BarChartRodData(toY: double.parse(total))],
           ),
           BarChartGroupData(
             x: 1,

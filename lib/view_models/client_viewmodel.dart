@@ -25,6 +25,12 @@ class ClientViewModel extends ChangeNotifier {
     await loadClients();
   }
 
+  List<Client> get expiredClients {
+    return clients
+        .where((c) => c.endDate.difference(DateTime.now()).inDays < 0)
+        .toList();
+  }
+
   void rechargeClient(Client client, DateTime newEndDate) async {
     client.endDate = newEndDate; // update end date
 
