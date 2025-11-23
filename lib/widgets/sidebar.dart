@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/screens/expired_client.dart';
 import '../screens/clients_screen.dart';
 import '../screens/revenue_screen.dart';
@@ -7,16 +8,19 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 200.w,
       color: Color.fromARGB(255, 6, 35, 59),
       child: Column(
         children: [
           const SizedBox(height: 20),
-          Text('ALI Gym ', style: TextStyle(fontSize: 30, color: Colors.white)),
-          SizedBox(height: 50),
+          Text(
+            'ALI Gym ',
+            style: TextStyle(fontSize: 30.sp, color: Colors.white),
+          ),
+          SizedBox(height: 50.h),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(180, 50), // width, height
+              minimumSize: Size(180.w, 50.h), // width, height
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12), // round corners
@@ -34,10 +38,10 @@ class SideBar extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(180, 50), // width, height
+              minimumSize: Size(180.w, 50.h), // width, height
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12), // round corners
@@ -49,16 +53,16 @@ class SideBar extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => RevenueScreen()),
               );
             },
-            child: const Text(
+            child: Text(
               "Daily Revenue",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(180, 50), // width, height
+              minimumSize: Size(180.w, 50.h), // width, height
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12), // round corners
@@ -79,7 +83,7 @@ class SideBar extends StatelessWidget {
           Text(
             'By Talbi Anis',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

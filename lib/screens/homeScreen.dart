@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/screens/clients_screen.dart';
 import 'package:gym_manager/screens/expired_client.dart';
@@ -6,6 +7,7 @@ import 'package:gym_manager/screens/revenue_screen.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
 import 'package:gym_manager/widgets/clients_bar_chart.dart';
+import 'package:gym_manager/widgets/revenue_line_chart.dart';
 import 'package:gym_manager/widgets/sidebar.dart';
 import 'package:gym_manager/widgets/stat_card.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Row(
         children: [
           SideBar(),
-          SizedBox(width: 40),
+          SizedBox(width: 20.w),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -115,38 +117,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 50),
-                  // Expanded(
-                  //   flex: 3,
+                  SizedBox(height: 8.h),
+                  Expanded(
+                    flex: 2,
 
-                  //   child: Container(
-                  //     padding: EdgeInsets.all(20),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.white,
-                  //       borderRadius: BorderRadius.circular(16),
-                  //       boxShadow: [
-                  //         BoxShadow(color: Colors.black12, blurRadius: 6),
-                  //       ],
-                  //     ),
-                  //     child: RevenueLineChart(
-                  //       data: [
-                  //         1200,
-                  //         1500,
-                  //         1000,
-                  //         1800,
-                  //         2100,
-                  //         2300,
-                  //         1700,
-                  //         2000,
-                  //         1900,
-                  //         2500,
-                  //         2600,
-                  //         3000,
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(width: 20),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black12, blurRadius: 6),
+                        ],
+                      ),
+                      child: RevenueLineChart(
+                        data: [
+                          1200,
+                          1500,
+                          1000,
+                          1800,
+                          2100,
+                          2300,
+                          1700,
+                          2000,
+                          1900,
+                          2500,
+                          2600,
+                          3000,
+                        ],
+                      ),
+                    ),
+                  ),
+
                   Expanded(
                     flex: 2,
                     child: Container(

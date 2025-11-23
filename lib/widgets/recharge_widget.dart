@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/models/client.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart'
     show ClientViewModel;
@@ -43,7 +44,7 @@ void showRechargeDialog(Client client, BuildContext context) {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 DropdownButton<int>(
                   value: monthsToAdd,
                   items: [1, 3, 6, 12]

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/screens/homeScreen.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
@@ -24,11 +25,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Gym Manager",
+    return ScreenUtilInit(
+      designSize: Size(1366, 768),
 
-      home: HomeScreen(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Gym Manager",
+
+        home: HomeScreen(),
+      ),
     );
   }
 }

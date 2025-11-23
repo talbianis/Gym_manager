@@ -43,9 +43,13 @@ class _ClientsScreenState extends State<ClientsScreen> {
               final daysLeft = client.endDate.difference(DateTime.now()).inDays;
 
               return Card(
-                color: daysLeft <= 5
-                    ? Colors.red[100]
-                    : Colors.greenAccent, // Expiry warning
+                color: daysLeft <= 0
+                    ? Colors.red[500]
+                    : (daysLeft < 5 ? Colors.red[100] : Colors.greenAccent),
+
+                // color: daysLeft <= 5
+                //     ? Colors.red[100]
+                //     : Colors.greenAccent, // Expiry warning
                 margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: ListTile(
                   title: Text(client.name),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CounterRow extends StatelessWidget {
   final String label;
@@ -22,7 +23,10 @@ class CounterRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Expanded(flex: 5, child: Text(label, style: TextStyle(fontSize: 16))),
+          Expanded(
+            flex: 5,
+            child: Text(label, style: TextStyle(fontSize: 16.sp)),
+          ),
           Expanded(
             flex: 3,
             child: Text("${price} DA", textAlign: TextAlign.center),
@@ -36,9 +40,9 @@ class CounterRow extends StatelessWidget {
                   onPressed: onDecrement,
                   icon: Icon(Icons.remove_circle_outline),
                 ),
-                SizedBox(width: 8),
-                Text(count.toString(), style: TextStyle(fontSize: 16)),
-                SizedBox(width: 8),
+                SizedBox(width: 8.w),
+                Text(count.toString(), style: TextStyle(fontSize: 16.sp)),
+                SizedBox(width: 8.w),
                 IconButton(
                   onPressed: onIncrement,
                   icon: Icon(Icons.add_circle_outline),

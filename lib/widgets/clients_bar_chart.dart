@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ClientsBarChart extends StatelessWidget {
   final String total;
@@ -31,13 +32,15 @@ class ClientsBarChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Clients Overview",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Center(
+            child: const Text(
+              "Clients Overview",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 40.h),
           SizedBox(
-            height: 260,
+            height: 100.h,
             child: BarChart(
               BarChartData(
                 maxY: _maxValue(),
@@ -142,8 +145,8 @@ class ClientsBarChart extends StatelessWidget {
                   ),
                 ],
               ),
-              swapAnimationDuration: const Duration(milliseconds: 600),
-              swapAnimationCurve: Curves.easeOut,
+              swapAnimationDuration: const Duration(milliseconds: 1000),
+              swapAnimationCurve: Curves.easeInOutCirc,
             ),
           ),
         ],
@@ -165,7 +168,7 @@ class ClientsBarChart extends StatelessWidget {
         BarChartRodData(
           toY: value,
           borderRadius: BorderRadius.circular(10),
-          width: 26,
+          width: 40.w,
           gradient: LinearGradient(
             colors: [color1, color2],
             begin: Alignment.bottomCenter,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../models/client.dart';
@@ -41,7 +42,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
               decoration: InputDecoration(labelText: "Phone"),
               keyboardType: TextInputType.phone,
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Row(
               children: [
                 Text("Start Date: "),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StatCard extends StatelessWidget {
   final String title;
@@ -8,8 +9,8 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
-      width: 200,
+      height: 120.h,
+      width: 200.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
@@ -17,11 +18,11 @@ class StatCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(title, style: TextStyle(fontSize: 16)),
-          SizedBox(height: 10),
+          Text(title, style: TextStyle(fontSize: 16.sp)),
+          SizedBox(height: 10.h),
           Text(
             value,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
           ),
         ],
       ),
