@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/widgets/add_client_dialog.dart';
-import 'package:gym_manager/widgets/recharge_widget.dart';
-import 'package:intl/intl.dart';
+import 'package:gym_manager/widgets/client_list.dart';
+import 'package:gym_manager/widgets/empty_searchstate.dart';
+
+import 'package:gym_manager/widgets/loading_state.dart';
+import 'package:gym_manager/widgets/no_clientstate.dart';
+import 'package:gym_manager/widgets/normal_appbar.dart';
+import 'package:gym_manager/widgets/search_appbar.dart';
+
 import 'package:provider/provider.dart';
 
 class ClientsScreen extends StatefulWidget {
@@ -12,106 +17,92 @@ class ClientsScreen extends StatefulWidget {
 }
 
 class _ClientsScreenState extends State<ClientsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+  bool _initialLoad = true;
+
   @override
   void initState() {
     super.initState();
-    // Load clients when screen opens
-    Provider.of<ClientViewModel>(context, listen: false).loadClients();
+    _loadClients();
+  }
+
+  Future<void> _loadClients() async {
+    await Provider.of<ClientViewModel>(context, listen: false).loadClients();
+    setState(() {
+      _initialLoad = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    Provider.of<ClientViewModel>(context, listen: false).searchClients(query);
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    Provider.of<ClientViewModel>(context, listen: false).clearSearch();
+    setState(() {
+      _isSearching = false;
+    });
+  }
+
+  void _startSearch() {
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void _addNewClient() {
+    showDialog(context: context, builder: (_) => AddClientDialog()).then((_) {
+      _loadClients();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Clients")),
+      appBar: _isSearching
+          ? SearchAppBar(
+              searchController: _searchController,
+              onClearSearch: _clearSearch,
+              onSearchChanged: _onSearchChanged,
+            )
+          : NormalAppBar(onSearchPressed: _startSearch),
       body: Consumer<ClientViewModel>(
         builder: (context, clientVM, child) {
-          final clients = clientVM.clients;
+          final displayClients = clientVM.filteredClients;
 
-          if (clients.isEmpty) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: AppColor.mainColor,
-                strokeWidth: 6,
-              ),
+          if (_initialLoad) {
+            return LoadingState();
+          }
+
+          if (clientVM.clients.isEmpty) {
+            return NoClientsState(onAddClient: _addNewClient);
+          }
+
+          if (displayClients.isEmpty && clientVM.searchQuery.isNotEmpty) {
+            return EmptySearchState(
+              query: clientVM.searchQuery,
+              onClearSearch: _clearSearch,
             );
           }
 
-          return ListView.builder(
-            itemCount: clients.length,
-            itemBuilder: (context, index) {
-              final client = clients[index];
-              final daysLeft = client.endDate.difference(DateTime.now()).inDays;
-
-              return Card(
-                color: daysLeft <= 0
-                    ? Colors.red[500]
-                    : (daysLeft < 5 ? Colors.red[100] : Colors.greenAccent),
-
-                // color: daysLeft <= 5
-                //     ? Colors.red[100]
-                //     : Colors.greenAccent, // Expiry warning
-                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: ListTile(
-                  title: Text(client.name),
-                  subtitle: Text(
-                    "days left: ${daysLeft}\nPhone: ${client.phone}\nEnds: ${DateFormat('yyyy-MM-dd').format(client.endDate)}",
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min, // important
-                    children: [
-                      // Recharge button
-                      ElevatedButton(
-                        child: Text("Recharge"),
-                        onPressed: () {
-                          showRechargeDialog(client, context);
-                        },
-                      ),
-                      SizedBox(width: 8),
-                      // Delete button with confirmation
-                      IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _showDeleteDialog(client, clientVM),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+          return ClientsList(clients: displayClients, onRefresh: _loadClients);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.greenAccent,
-        onPressed: () {
-          showDialog(context: context, builder: (_) => AddClientDialog());
-        },
-      ),
-    );
-  }
-
-  // Confirmation dialog for deletion
-  void _showDeleteDialog(client, ClientViewModel clientVM) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text("Delete ${client.name}?"),
-        content: Text("Are you sure you want to delete this client?"),
-        actions: [
-          TextButton(
-            child: Text("Cancel"),
-            onPressed: () => Navigator.pop(ctx),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text("Delete"),
-            onPressed: () async {
-              await clientVM.deleteClient(client.id!);
-              Navigator.pop(ctx); // close the dialog
-            },
-          ),
-        ],
-      ),
+      floatingActionButton: _isSearching
+          ? null
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: Colors.greenAccent,
+              onPressed: _addNewClient,
+            ),
     );
   }
 }

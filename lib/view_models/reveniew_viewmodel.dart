@@ -14,15 +14,23 @@ class RevenueViewModel extends ChangeNotifier {
 
   bool isSaving = false;
 
+  // total revenue of all items
   int get total {
     int sum = 0;
     for (var it in items) sum += it.total;
     return sum;
   }
 
+  // count of items (still useful for UI counters)
   int countByKey(String key) {
     final it = items.firstWhere((e) => e.key == key);
     return it.count;
+  }
+
+  // total revenue by key
+  int totalByKey(String key) {
+    final it = items.firstWhere((e) => e.key == key);
+    return it.total;
   }
 
   void increment(String key) {
@@ -54,10 +62,10 @@ class RevenueViewModel extends ChangeNotifier {
 
     final revenue = Revenue(
       date: DateTime(today.year, today.month, today.day),
-      waterSales: countByKey('water'),
-      sessionSales: countByKey('session'),
-      subscriptionSales: countByKey('subscription'),
-      wheySales: countByKey('whey'),
+      waterSales: totalByKey('water'),
+      sessionSales: totalByKey('session'),
+      subscriptionSales: totalByKey('subscription'),
+      wheySales: totalByKey('whey'),
     );
 
     if (existing != null) {
@@ -77,11 +85,21 @@ class RevenueViewModel extends ChangeNotifier {
     final today = DateTime.now();
     final existing = await DBHelper.getRevenueByDate(today);
     if (existing != null) {
-      items.firstWhere((i) => i.key == 'water').count = existing.waterSales;
-      items.firstWhere((i) => i.key == 'whey').count = existing.wheySales;
-      items.firstWhere((i) => i.key == 'session').count = existing.sessionSales;
+      items.firstWhere((i) => i.key == 'water').count =
+          (existing.waterSales /
+                  items.firstWhere((i) => i.key == 'water').price)
+              .round();
+      items.firstWhere((i) => i.key == 'whey').count =
+          (existing.wheySales / items.firstWhere((i) => i.key == 'whey').price)
+              .round();
+      items.firstWhere((i) => i.key == 'session').count =
+          (existing.sessionSales /
+                  items.firstWhere((i) => i.key == 'session').price)
+              .round();
       items.firstWhere((i) => i.key == 'subscription').count =
-          existing.subscriptionSales;
+          (existing.subscriptionSales /
+                  items.firstWhere((i) => i.key == 'subscription').price)
+              .round();
     } else {
       resetCounts();
     }
@@ -89,8 +107,19 @@ class RevenueViewModel extends ChangeNotifier {
   }
 
   // Get last 30 days totals (for chart)
-  Future<List<int>> getLastNDaysTotals(int n) async {
-    final revs = await DBHelper.getLastNDaysRevenue(n);
-    return revs.map((r) => r.total).toList();
+  Future<List<int>> getLast30DaysRevenue() async {
+    final dbData = await DBHelper.getDailyRevenueLast30Days();
+
+    List<int> finalData = [];
+
+    for (int i = 29; i >= 0; i--) {
+      final date = DateTime.now().subtract(Duration(days: i));
+      final dateString =
+          "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+
+      finalData.add(dbData[dateString] ?? 0);
+    }
+
+    return finalData;
   }
 }

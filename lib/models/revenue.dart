@@ -1,6 +1,6 @@
 class Revenue {
   final int? id;
-  final DateTime date; // store only yyyy-MM-dd as ISO string when saving
+  final DateTime date;
   final int waterSales;
   final int sessionSales;
   final int subscriptionSales;
@@ -16,9 +16,16 @@ class Revenue {
     required this.wheySales,
   }) : total = waterSales + sessionSales + subscriptionSales + wheySales;
 
+  /// Convert DateTime to SQL Date Format: YYYY-MM-DD
+  String _toSqlDate(DateTime d) {
+    return "${d.year.toString().padLeft(4, '0')}-"
+        "${d.month.toString().padLeft(2, '0')}-"
+        "${d.day.toString().padLeft(2, '0')}";
+  }
+
   Map<String, dynamic> toMap() => {
     'id': id,
-    'date': date.toIso8601String(),
+    'date': _toSqlDate(date), // FIXED — now stored as YYYY-MM-DD
     'water_sales': waterSales,
     'session_sales': sessionSales,
     'subscription_sales': subscriptionSales,
@@ -28,7 +35,7 @@ class Revenue {
 
   factory Revenue.fromMap(Map<String, dynamic> m) => Revenue(
     id: m['id'],
-    date: DateTime.parse(m['date']),
+    date: DateTime.parse(m['date']), // parses "YYYY-MM-DD" correctly
     waterSales: m['water_sales'],
     sessionSales: m['session_sales'],
     subscriptionSales: m['subscription_sales'],
