@@ -119,7 +119,6 @@ class ClientViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Your existing methods remain the same...
   Future<void> addClient(Client client) async {
     final db = await DBHelper.database;
     await db.insert("clients", client.toMap());

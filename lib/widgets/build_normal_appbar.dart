@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
 
-class _buildNormalAppBar extends StatefulWidget {
-  const _buildNormalAppBar({Key? key}) : super(key: key);
+class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onSearchPressed;
+
+  const NormalAppBar({super.key, required this.onSearchPressed});
 
   @override
-  State<_buildNormalAppBar> createState() => _buildNormalAppBarState();
-}
+  Size get preferredSize => Size.fromHeight(110);
 
-bool isSearching = false;
-
-class _buildNormalAppBarState extends State<_buildNormalAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("Clients"),
+      elevation: 8,
+      backgroundColor: Colors.white,
+      title: Text(
+        "Clientssssssss",
+        style: TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
+        ),
+      ),
+      centerTitle: false,
       actions: [
-        IconButton(
-          onPressed: () {
-            setState(() {
-              isSearching = true;
-            });
-          },
-          icon: Icon(Icons.search),
+        Container(
+          margin: EdgeInsets.only(right: 12),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            icon: Icon(Icons.search, color: Colors.black87),
+            onPressed: onSearchPressed,
+          ),
         ),
       ],
     );

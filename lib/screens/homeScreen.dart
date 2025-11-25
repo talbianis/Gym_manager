@@ -32,147 +32,194 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            "Gym Manager Dashboard",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        backgroundColor: AppColor.mainColor,
-      ),
-      body: Row(
-        children: [
-          SideBar(),
-          SizedBox(width: 20.w),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Consumer<ClientViewModel>(
-                        builder: (context, value, child) => GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ClientsScreen(),
-                              ),
-                            );
-                          },
-                          child: StatCard(
-                            title: "Total Clients",
-                            value: value.clients.length.toString(),
-                          ),
-                        ),
-                      ),
-                      Consumer<ClientViewModel>(
-                        builder: (context, value, child) => StatCard(
-                          title: "Active",
-                          value:
-                              (value.clients.length -
-                                      value.expiredClients.length)
-                                  .toString(),
-                        ),
-                      ),
-                      Consumer<ClientViewModel>(
-                        builder: (context, value, child) => GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ExpiredClientsScreen(),
-                              ),
-                            );
-                          },
-                          child: StatCard(
-                            title: "Expired",
-                            value: value.expiredClients.length.toString(),
-                          ),
-                        ),
-                      ),
-                      Consumer<RevenueViewModel>(
-                        builder: (context, revValue, child) => GestureDetector(
-                          onDoubleTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RevenueScreen(),
-                              ),
-                            );
-                          },
-                          child: StatCard(
-                            title: "Today Revenue",
-                            value: revValue.total.toString() + " DA",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12.h),
-
-                  // --- Line Chart (30 days revenue) ---
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: EdgeInsets.all(20.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 6),
-                        ],
-                      ),
-                      child: Consumer<RevenueViewModel>(
-                        builder: (context, revVM, child) =>
-                            FutureBuilder<List<int>>(
-                              future: revVM.getLast30DaysRevenue(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                return RevenueLineChart(
-                                  revenueData: snapshot.data!,
-                                );
-                              },
+      backgroundColor: AppColor.mainColor,
+      // appBar: AppBar(
+      //   title: Center(
+      //     child: Text(
+      //       "Gym Manager Dashboard",
+      //       style: TextStyle(color: Colors.white),
+      //     ),
+      //   ),
+      //   backgroundColor: AppColor.mainColor,
+      // ),
+      body: Container(
+        color: AppColor.mainColor,
+        child: Row(
+          children: [
+            SideBar(),
+            SizedBox(width: 20.w),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Gym Manager Dashboard',
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                      ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Container(
+                          height: 150.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 10.h),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Consumer<ClientViewModel>(
+                                    builder: (context, value, child) =>
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ClientsScreen(),
+                                              ),
+                                            );
+                                          },
+                                          child: StatCard(
+                                            title: "Total Clients",
+                                            value: value.clients.length
+                                                .toString(),
+                                          ),
+                                        ),
+                                  ),
+                                  Consumer<ClientViewModel>(
+                                    builder: (context, value, child) =>
+                                        StatCard(
+                                          title: "Active",
+                                          value:
+                                              (value.clients.length -
+                                                      value
+                                                          .expiredClients
+                                                          .length)
+                                                  .toString(),
+                                        ),
+                                  ),
+                                  Consumer<ClientViewModel>(
+                                    builder: (context, value, child) =>
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ExpiredClientsScreen(),
+                                              ),
+                                            );
+                                          },
+                                          child: StatCard(
+                                            title: "Expired",
+                                            value: value.expiredClients.length
+                                                .toString(),
+                                          ),
+                                        ),
+                                  ),
+                                  Consumer<RevenueViewModel>(
+                                    builder: (context, revValue, child) =>
+                                        GestureDetector(
+                                          onDoubleTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RevenueScreen(),
+                                              ),
+                                            );
+                                          },
+                                          child: StatCard(
+                                            title: "Today Revenue",
+                                            value:
+                                                revValue.total.toString() +
+                                                " DA",
+                                          ),
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(height: 12.h),
+                    SizedBox(height: 12.h),
 
-                  // --- Bar Chart (clients overview) ---
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: EdgeInsets.all(20.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 6),
-                        ],
-                      ),
-                      child: Consumer<ClientViewModel>(
-                        builder: (context, clientVM, child) => ClientsBarChart(
-                          active:
-                              clientVM.clients.length -
-                              clientVM.expiredClients.length,
-                          expired: clientVM.expiredClients.length,
-                          total: clientVM.clients.length.toString(),
+                    // --- Line Chart (30 days revenue) ---
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(20.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 6),
+                          ],
+                        ),
+                        child: Consumer<RevenueViewModel>(
+                          builder: (context, revVM, child) =>
+                              FutureBuilder<List<int>>(
+                                future: revVM.getLast30DaysRevenue(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  return RevenueLineChart(
+                                    revenueData: snapshot.data!,
+                                  );
+                                },
+                              ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 12.h),
+
+                    // --- Bar Chart (clients overview) ---
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(20.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 6),
+                          ],
+                        ),
+                        child: Consumer<ClientViewModel>(
+                          builder: (context, clientVM, child) =>
+                              ClientsBarChart(
+                                active:
+                                    clientVM.clients.length -
+                                    clientVM.expiredClients.length,
+                                expired: clientVM.expiredClients.length,
+                                total: clientVM.clients.length.toString(),
+                              ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

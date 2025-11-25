@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/widgets/add_client_dialog.dart';
 import 'package:gym_manager/widgets/client_list.dart';
@@ -99,8 +100,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
       floatingActionButton: _isSearching
           ? null
           : FloatingActionButton(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.greenAccent,
+              child: Icon(Icons.add, color: AppColor.whitecolor),
+              backgroundColor: AppColor.mainColor, //
+
               onPressed: _addNewClient,
             ),
     );

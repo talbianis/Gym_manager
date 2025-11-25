@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_manager/const/colors.dart';
 
 class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onSearchPressed;
@@ -12,9 +13,29 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("Clients"),
+      elevation: 100,
+      backgroundColor: AppColor.mainColor,
+      title: Text(
+        "Clients",
+        style: TextStyle(
+          color: AppColor.whitecolor,
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
+        ),
+      ),
+      centerTitle: false,
       actions: [
-        IconButton(onPressed: onSearchPressed, icon: Icon(Icons.search)),
+        Container(
+          margin: EdgeInsets.only(right: 12),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            icon: Icon(Icons.search, color: Colors.black87),
+            onPressed: onSearchPressed,
+          ),
+        ),
       ],
     );
   }

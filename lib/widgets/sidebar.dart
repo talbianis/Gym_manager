@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/screens/expired_client.dart';
 import '../screens/clients_screen.dart';
 import '../screens/revenue_screen.dart';
@@ -9,13 +10,24 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200.w,
-      color: Color.fromARGB(255, 6, 35, 59),
+      color: Color.fromARGB(255, 27, 25, 80),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 20),
-          Text(
-            'ALI Gym ',
-            style: TextStyle(fontSize: 30.sp, color: Colors.white),
+          SizedBox(height: 20.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.fitness_center,
+                size: 40.sp,
+                color: AppColor.whitecolor,
+              ),
+              Text(
+                ' ALI Gym ',
+                style: TextStyle(fontSize: 30.sp, color: AppColor.whitecolor),
+              ),
+            ],
           ),
           SizedBox(height: 50.h),
           ElevatedButton(
