@@ -13,6 +13,10 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: AppColor.whitecolor),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
       elevation: 100,
       backgroundColor: AppColor.mainColor,
       title: Text(

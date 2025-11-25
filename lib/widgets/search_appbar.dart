@@ -19,8 +19,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: AppColor.mainColor,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: Icon(Icons.arrow_back, color: AppColor.whitecolor),
         onPressed: onClearSearch,
       ),
       title: TextField(
@@ -29,9 +30,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: InputDecoration(
           hintText: 'Search by name or phone...',
           border: InputBorder.none,
-          hintStyle: TextStyle(color: AppColor.blackcolor),
+          hintStyle: TextStyle(color: AppColor.whitecolor),
         ),
-        style: TextStyle(color: AppColor.blackcolor),
+        style: TextStyle(color: AppColor.whitecolor),
         onChanged: onSearchChanged,
       ),
       actions: [

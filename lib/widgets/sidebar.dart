@@ -10,6 +10,7 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200.w,
+
       color: Color.fromARGB(255, 27, 25, 80),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

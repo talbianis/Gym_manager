@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_manager/const/colors.dart';
 
 class CounterRow extends StatelessWidget {
   final String label;
@@ -20,41 +21,73 @@ class CounterRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Text(label, style: TextStyle(fontSize: 16.sp)),
-          ),
-          Expanded(
-            flex: 3,
-            child: Text("${price} DA", textAlign: TextAlign.center),
-          ),
-          Expanded(
-            flex: 4,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: onDecrement,
-                  icon: Icon(Icons.remove_circle_outline),
-                ),
-                SizedBox(width: 8.w),
-                Text(count.toString(), style: TextStyle(fontSize: 16.sp)),
-                SizedBox(width: 8.w),
-                IconButton(
-                  onPressed: onIncrement,
-                  icon: Icon(Icons.add_circle_outline),
-                ),
-              ],
+      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 90.w),
+      child: Container(
+        height: 70.h,
+        decoration: BoxDecoration(
+          color: AppColor.whitecolor,
+          borderRadius: BorderRadius.circular(15.r),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(flex: 1, child: SizedBox(width: 5.w)),
+            Expanded(
+              flex: 2,
+              child: Text(
+                label,
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+              ),
             ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Text("${count * price} DA", textAlign: TextAlign.center),
-          ),
-        ],
+            Expanded(
+              flex: 3,
+              child: Text(
+                "${price} DA",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: Expanded(
+                flex: 4,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      onPressed: onDecrement,
+                      icon: Icon(Icons.remove_circle),
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      count.toString(),
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    IconButton(
+                      onPressed: onIncrement,
+                      icon: Icon(Icons.add_circle),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Text(
+                "${count * price} DA",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
