@@ -47,13 +47,14 @@ class CounterRow extends StatelessWidget {
                 style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Expanded(
-                flex: 4,
+
+            Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -78,6 +79,7 @@ class CounterRow extends StatelessWidget {
                 ),
               ),
             ),
+
             Expanded(
               flex: 3,
               child: Text(

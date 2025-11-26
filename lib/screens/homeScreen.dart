@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           },
                                           child: StatCard(
+                                            color: AppColor.secondcolor,
                                             title: "Total Clients",
                                             value: value.clients.length
                                                 .toString(),
@@ -103,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Consumer<ClientViewModel>(
                                     builder: (context, value, child) =>
                                         StatCard(
+                                          color: AppColor.blackcolor,
                                           title: "Active",
                                           value:
                                               (value.clients.length -
@@ -124,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           },
                                           child: StatCard(
+                                            color: Colors.red,
                                             title: "Expired",
                                             value: value.expiredClients.length
                                                 .toString(),
@@ -142,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           },
                                           child: StatCard(
+                                            color: Colors.green,
                                             title: "Today Revenue",
                                             value:
                                                 revValue.total.toString() +

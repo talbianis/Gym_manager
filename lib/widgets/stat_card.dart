@@ -4,8 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class StatCard extends StatelessWidget {
   final String title;
   final String value;
+  final Color color;
 
-  const StatCard({required this.title, required this.value});
+  const StatCard({
+    required this.title,
+    required this.value,
+    required this.color,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +27,11 @@ class StatCard extends StatelessWidget {
           SizedBox(height: 10.h),
           Text(
             value,
-            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 22.sp,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
           ),
         ],
       ),
