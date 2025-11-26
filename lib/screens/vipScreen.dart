@@ -448,144 +448,158 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
     final ageController = TextEditingController();
     final phoneController = TextEditingController();
     final weightController = TextEditingController();
+
     DateTime startDate = DateTime.now();
     DateTime endDate = DateTime.now().add(const Duration(days: 30));
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add VIP Client'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
+      builder: (context) => StatefulBuilder(
+        // ← AJOUT IMPORTANT
+        builder: (context, setDialogState) {
+          // ← setDialogState pour le dialog
+          return AlertDialog(
+            title: const Text('Add VIP Client'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: ageController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Age',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: phoneController,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: 'Phone',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: weightController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Initial Weight (kg)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    title: const Text('Start Date'),
+                    subtitle: Text(
+                      '${startDate.day}/${startDate.month}/${startDate.year}',
+                    ),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: startDate,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2100),
+                      );
+                      if (date != null) {
+                        setDialogState(() {
+                          // ← Utilisez setDialogState ici
+                          startDate = date;
+                          endDate = date.add(const Duration(days: 30));
+                        });
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('End Date'),
+                    subtitle: Text(
+                      '${endDate.day}/${endDate.month}/${endDate.year}',
+                    ),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: endDate,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2030),
+                      );
+                      if (date != null) {
+                        setDialogState(() {
+                          // ← Utilisez setDialogState ici
+                          endDate = date;
+                        });
+                      }
+                    },
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: ageController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Age',
-                  border: OutlineInputBorder(),
-                ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: weightController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Initial Weight (kg)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              ListTile(
-                title: const Text('Start Date'),
-                subtitle: Text(
-                  '${startDate.day}/${startDate.month}/${startDate.year}',
-                ),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: startDate,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2030),
+              ElevatedButton(
+                onPressed: () async {
+                  if (nameController.text.isEmpty ||
+                      ageController.text.isEmpty ||
+                      phoneController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please fill all fields')),
+                    );
+                    return;
+                  }
+
+                  final weights = <WeightEntry>[];
+                  if (weightController.text.isNotEmpty) {
+                    weights.add(
+                      WeightEntry(
+                        date: DateTime.now(),
+                        weight: double.parse(weightController.text),
+                      ),
+                    );
+                  }
+
+                  final client = VipClient(
+                    name: nameController.text,
+                    age: int.parse(ageController.text),
+                    phone: phoneController.text,
+                    weights: weights,
+                    startDate: startDate,
+                    endDate: endDate,
                   );
-                  if (date != null) {
-                    startDate = date;
+
+                  final success = await Provider.of<VipClientViewModel>(
+                    context,
+                    listen: false,
+                  ).addVipClient(client);
+
+                  Navigator.pop(context);
+
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('VIP Client added successfully'),
+                      ),
+                    );
                   }
                 },
-              ),
-              ListTile(
-                title: const Text('End Date'),
-                subtitle: Text(
-                  '${endDate.day}/${endDate.month}/${endDate.year}',
-                ),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: endDate,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2030),
-                  );
-                  if (date != null) {
-                    endDate = date;
-                  }
-                },
+                child: const Text('Add'),
               ),
             ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (nameController.text.isEmpty ||
-                  ageController.text.isEmpty ||
-                  phoneController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please fill all fields')),
-                );
-                return;
-              }
-
-              final weights = <WeightEntry>[];
-              if (weightController.text.isNotEmpty) {
-                weights.add(
-                  WeightEntry(
-                    date: DateTime.now(),
-                    weight: double.parse(weightController.text),
-                  ),
-                );
-              }
-
-              final client = VipClient(
-                name: nameController.text,
-                age: int.parse(ageController.text),
-                phone: phoneController.text,
-                weights: weights,
-                startDate: startDate,
-                endDate: endDate,
-              );
-
-              final success = await Provider.of<VipClientViewModel>(
-                context,
-                listen: false,
-              ).addVipClient(client);
-
-              Navigator.pop(context);
-
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('VIP Client added successfully'),
-                  ),
-                );
-              }
-            },
-            child: const Text('Add'),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
