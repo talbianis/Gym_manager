@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           },
                                           child: StatCard(
-                                            color: AppColor.secondcolor,
+                                            color: Colors.blue,
                                             title: "Total Clients",
                                             value: value.clients.length
                                                 .toString(),

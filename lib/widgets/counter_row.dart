@@ -81,7 +81,7 @@ class CounterRow extends StatelessWidget {
             ),
 
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Text(
                 "${count * price} DA",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),

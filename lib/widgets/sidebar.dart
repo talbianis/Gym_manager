@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/screens/expired_client.dart';
+import 'package:gym_manager/screens/vipScreen.dart';
 import '../screens/clients_screen.dart';
 import '../screens/revenue_screen.dart';
 
@@ -93,6 +94,15 @@ class SideBar extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 250),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => VipClientsScreen()),
+              );
+            },
+            child: Text('vip Client'),
+          ),
           Text(
             'By Talbi Anis',
             style: TextStyle(
