@@ -19,7 +19,7 @@ class ClientsBarChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 97, 105, 109),
+        color: const Color.fromARGB(255, 146, 161, 167),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

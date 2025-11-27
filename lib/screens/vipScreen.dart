@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/models/vipclient.dart';
 import 'package:gym_manager/view_models/vip_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -34,10 +35,18 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VIP Clients'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColor.whitecolor),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: AppColor.mainColor,
+        title: Text(
+          'VIP Clients',
+          style: TextStyle(color: AppColor.whitecolor, fontSize: 22.sp),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list, color: AppColor.whitecolor),
             onPressed: () => _showFilterDialog(context),
           ),
         ],
@@ -203,8 +212,11 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
   ) {
     final isSelected = viewModel.currentFilter == filter;
     return FilterChip(
-      label: Text(label),
+      selectedColor: Colors.blueGrey,
+      backgroundColor: AppColor.mainColor,
+      label: Text(label, style: TextStyle(color: AppColor.whitecolor)),
       selected: isSelected,
+
       onSelected: (selected) {
         viewModel.filterClients(filter);
       },
@@ -279,12 +291,12 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
                   children: [
                     Text(
                       client.name,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: TextStyle(
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       '${client.age} years • ${client.phone}',
                       style: const TextStyle(color: Colors.grey),
@@ -670,8 +682,14 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
         ),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColor.mainColor),
+            ),
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text(
+              'Close',
+              style: TextStyle(color: AppColor.whitecolor),
+            ),
           ),
         ],
       ),
@@ -701,72 +719,105 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Weight Entry'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: weightController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Weight (kg)',
-                border: OutlineInputBorder(),
-              ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return AlertDialog(
+            title: const Text('Add Weight Entry'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: weightController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Weight (kg)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  title: const Text('Date'),
+                  subtitle: Text(
+                    '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                  ),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: selectedDate,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime.now(),
+                    );
+                    if (date != null) {
+                      setDialogState(() {
+                        selectedDate = date;
+                      });
+                    }
+                    // setDialogState() {
+                    //   if (date != null) {
+                    //     selectedDate = date;
+                    //   }
+                    // }
+
+                    ;
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            ListTile(
-              title: const Text('Date'),
-              subtitle: Text(
-                '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+            actions: [
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    AppColor.mainColor,
+                  ),
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              trailing: const Icon(Icons.calendar_today),
-              onTap: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate,
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime.now(),
-                );
-                if (date != null) {
-                  selectedDate = date;
-                }
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (weightController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please enter weight')),
-                );
-                return;
-              }
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    AppColor.mainColor,
+                  ),
+                ),
+                onPressed: () async {
+                  if (weightController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter weight')),
+                    );
+                    return;
+                  }
 
-              final entry = WeightEntry(
-                date: selectedDate,
-                weight: double.parse(weightController.text),
-              );
+                  final entry = WeightEntry(
+                    date: selectedDate,
+                    weight: double.parse(weightController.text),
+                  );
 
-              final success = await viewModel.addWeightEntry(client.id!, entry);
+                  final success = await viewModel.addWeightEntry(
+                    client.id!,
+                    entry,
+                  );
 
-              Navigator.pop(context);
+                  Navigator.pop(context);
 
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Weight entry added')),
-                );
-              }
-            },
-            child: const Text('Add'),
-          ),
-        ],
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      snackBarAnimationStyle: AnimationStyle(
+                        curve: Curves.easeIn,
+                        reverseCurve: Curves.easeOut,
+                      ),
+                      const SnackBar(content: Text('Weight entry added')),
+                    );
+                  }
+                },
+                child: const Text('Add', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -792,10 +843,16 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
         ),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColor.mainColor),
+            ),
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white)),
           ),
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColor.mainColor),
+            ),
             onPressed: () async {
               final days = int.tryParse(daysController.text);
               if (days == null || days <= 0) {
@@ -818,7 +875,7 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
                 );
               }
             },
-            child: const Text('Extend'),
+            child: const Text('Extend', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -870,10 +927,16 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
         ),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColor.mainColor),
+            ),
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white)),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColor.mainColor,
+            ),
             onPressed: () async {
               final updatedClient = client.copyWith(
                 name: nameController.text,
@@ -891,7 +954,10 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
                 );
               }
             },
-            child: const Text('Update'),
+            child: const Text(
+              'Update',
+              style: TextStyle(color: AppColor.whitecolor),
+            ),
           ),
         ],
       ),
@@ -910,8 +976,11 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
         content: Text('Are you sure you want to delete ${client.name}?'),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColor.mainColor),
+            ),
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -926,7 +995,10 @@ class _VipClientsScreenState extends State<VipClientsScreen> {
                 ).showSnackBar(const SnackBar(content: Text('Client deleted')));
               }
             },
-            child: const Text('Delete'),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppColor.whitecolor),
+            ),
           ),
         ],
       ),
