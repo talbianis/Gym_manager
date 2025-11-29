@@ -33,15 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.mainColor,
-      // appBar: AppBar(
-      //   title: Center(
-      //     child: Text(
-      //       "Gym Manager Dashboard",
-      //       style: TextStyle(color: Colors.white),
-      //     ),
-      //   ),
-      //   backgroundColor: AppColor.mainColor,
-      // ),
+
       body: Container(
         color: AppColor.mainColor,
         child: Row(
@@ -77,83 +69,89 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             children: [
                               SizedBox(height: 10.h),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Consumer<ClientViewModel>(
-                                    builder: (context, value, child) =>
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ClientsScreen(),
-                                              ),
-                                            );
-                                          },
-                                          child: StatCard(
-                                            color: Colors.blue,
-                                            title: "Total Clients",
-                                            value: value.clients.length
-                                                .toString(),
-                                          ),
-                                        ),
-                                  ),
-                                  Consumer<ClientViewModel>(
-                                    builder: (context, value, child) =>
-                                        StatCard(
-                                          color: AppColor.blackcolor,
-                                          title: "Active",
-                                          value:
-                                              (value.clients.length -
-                                                      value
-                                                          .expiredClients
-                                                          .length)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 1),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(width: 20.w),
+                                    Consumer<ClientViewModel>(
+                                      builder: (context, value, child) =>
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ClientsScreen(),
+                                                ),
+                                              );
+                                            },
+                                            child: StatCard(
+                                              color: Colors.blue,
+                                              title: "Total Clients",
+                                              value: value.clients.length
                                                   .toString(),
-                                        ),
-                                  ),
-                                  Consumer<ClientViewModel>(
-                                    builder: (context, value, child) =>
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ExpiredClientsScreen(),
-                                              ),
-                                            );
-                                          },
-                                          child: StatCard(
-                                            color: Colors.red,
-                                            title: "Expired",
-                                            value: value.expiredClients.length
-                                                .toString(),
+                                            ),
                                           ),
-                                        ),
-                                  ),
-                                  Consumer<RevenueViewModel>(
-                                    builder: (context, revValue, child) =>
-                                        GestureDetector(
-                                          onDoubleTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    RevenueScreen(),
-                                              ),
-                                            );
-                                          },
-                                          child: StatCard(
-                                            color: Colors.green,
-                                            title: "Today Revenue",
+                                    ),
+                                    SizedBox(width: 80.w),
+                                    Consumer<ClientViewModel>(
+                                      builder: (context, value, child) =>
+                                          StatCard(
+                                            color: AppColor.blackcolor,
+                                            title: "Active",
                                             value:
-                                                revValue.total.toString() +
-                                                " DA",
+                                                (value.clients.length -
+                                                        value
+                                                            .expiredClients
+                                                            .length)
+                                                    .toString(),
                                           ),
-                                        ),
-                                  ),
-                                ],
+                                    ),
+                                    SizedBox(width: 80.w),
+                                    Consumer<ClientViewModel>(
+                                      builder: (context, value, child) =>
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ExpiredClientsScreen(),
+                                                ),
+                                              );
+                                            },
+                                            child: StatCard(
+                                              color: Colors.red,
+                                              title: "Expired",
+                                              value: value.expiredClients.length
+                                                  .toString(),
+                                            ),
+                                          ),
+                                    ),
+                                    SizedBox(width: 80.w),
+                                    Consumer<RevenueViewModel>(
+                                      builder: (context, revValue, child) =>
+                                          GestureDetector(
+                                            onDoubleTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RevenueScreen(),
+                                                ),
+                                              );
+                                            },
+                                            child: StatCard(
+                                              color: Colors.green,
+                                              title: "Today Revenue",
+                                              value:
+                                                  revValue.total.toString() +
+                                                  " DA",
+                                            ),
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

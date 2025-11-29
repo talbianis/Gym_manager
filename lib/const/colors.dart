@@ -5,4 +5,6 @@ class AppColor {
   static const secondcolor = Colors.greenAccent;
   static const blackcolor = Colors.black;
   static const whitecolor = Colors.white;
+  static const warningcolor = Colors.red;
+  static const successcolor = Colors.green;
 }

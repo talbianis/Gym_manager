@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_manager/const/colors.dart';
 
 class ClientsBarChart extends StatelessWidget {
   final String total;
@@ -19,7 +20,7 @@ class ClientsBarChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 146, 161, 167),
+        color: const Color.fromARGB(255, 197, 211, 216),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -69,7 +70,7 @@ class ClientsBarChart extends StatelessWidget {
                       return BarTooltipItem(
                         '$title\n$value',
                         const TextStyle(
-                          color: Colors.black,
+                          color: AppColor.blackcolor,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -177,7 +178,7 @@ class ClientsBarChart extends StatelessWidget {
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             toY: _maxValue(),
-            color: Colors.grey.withOpacity(0.1),
+            color: const Color.fromARGB(255, 3, 3, 3).withOpacity(0.1),
           ),
         ),
       ],

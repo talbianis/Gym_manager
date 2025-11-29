@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/widgets/add_client_dialog.dart';
 import 'package:gym_manager/widgets/client_list.dart';
 import 'package:gym_manager/widgets/empty_searchstate.dart';
-
 import 'package:gym_manager/widgets/loading_state.dart';
 import 'package:gym_manager/widgets/no_clientstate.dart';
 import 'package:gym_manager/widgets/normal_appbar.dart';
 import 'package:gym_manager/widgets/search_appbar.dart';
-
 import 'package:provider/provider.dart';
 
 class ClientsScreen extends StatefulWidget {
@@ -75,34 +74,81 @@ class _ClientsScreenState extends State<ClientsScreen> {
               onSearchChanged: _onSearchChanged,
             )
           : NormalAppBar(onSearchPressed: _startSearch),
+
       body: Consumer<ClientViewModel>(
         builder: (context, clientVM, child) {
           final displayClients = clientVM.filteredClients;
+          final todayExpiredClients = clientVM.getTodayExpiredClients();
 
-          if (_initialLoad) {
-            return LoadingState();
-          }
+          if (_initialLoad) return LoadingState();
 
-          if (clientVM.clients.isEmpty) {
-            return NoClientsState(onAddClient: _addNewClient);
-          }
+          return Column(
+            children: [
+              if (todayExpiredClients.isNotEmpty)
+                Container(
+                  padding: EdgeInsets.all(12),
+                  margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: AppColor.warningcolor),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.warning_amber,
+                        color: AppColor.warningcolor,
+                        size: 26,
+                      ),
+                      SizedBox(width: 10.w),
+                      Expanded(
+                        child: Text(
+                          todayExpiredClients.length == 1
+                              ? "${todayExpiredClients[0].name} انتهى اشتراكه اليوم."
+                              : "${todayExpiredClients.length} من العملاء انتهت اشتراكاتهم اليوم.",
+                          style: TextStyle(
+                            color: AppColor.warningcolor.shade700,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
-          if (displayClients.isEmpty && clientVM.searchQuery.isNotEmpty) {
-            return EmptySearchState(
-              query: clientVM.searchQuery,
-              onClearSearch: _clearSearch,
-            );
-          }
+              Expanded(
+                child: Builder(
+                  builder: (_) {
+                    if (clientVM.clients.isEmpty) {
+                      return NoClientsState(onAddClient: _addNewClient);
+                    }
 
-          return ClientsList(clients: displayClients, onRefresh: _loadClients);
+                    if (displayClients.isEmpty &&
+                        clientVM.searchQuery.isNotEmpty) {
+                      return EmptySearchState(
+                        query: clientVM.searchQuery,
+                        onClearSearch: _clearSearch,
+                      );
+                    }
+
+                    return ClientsList(
+                      clients: displayClients,
+                      onRefresh: _loadClients,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
         },
       ),
+
       floatingActionButton: _isSearching
           ? null
           : FloatingActionButton(
+              backgroundColor: AppColor.mainColor,
               child: Icon(Icons.add, color: AppColor.whitecolor),
-              backgroundColor: AppColor.mainColor, //
-
               onPressed: _addNewClient,
             ),
     );

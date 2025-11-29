@@ -96,6 +96,18 @@ class ClientViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Client> getTodayExpiredClients() {
+    final today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+    return clients.where((c) {
+      final end = DateTime(c.endDate.year, c.endDate.month, c.endDate.day);
+      return end.isAtSameMomentAs(today);
+    }).toList();
+  }
+
   void searchClients(String query) {
     _searchQuery = query;
 
