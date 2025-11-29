@@ -19,7 +19,7 @@ class SideBar extends StatelessWidget {
             decoration: BoxDecoration(
               color: Color.fromARGB(255, 27, 25, 80),
               image: DecorationImage(
-                alignment: AlignmentDirectional(-0.5, 1),
+                alignment: AlignmentDirectional(-0.60, 1),
                 image: AssetImage('assets/images/ali.jpg'),
                 fit: BoxFit.cover,
                 opacity: 0.6,
@@ -27,7 +27,6 @@ class SideBar extends StatelessWidget {
             ),
           ),
 
-          // Your existing content
           Container(
             width: 200.w,
             color: Colors.transparent,
@@ -38,21 +37,29 @@ class SideBar extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(
-                      Icons.fitness_center,
-                      size: 40.sp,
-                      color: AppColor.whitecolor,
+                    // Icon(
+                    //   Icons.fitness_center_rounded,
+                    //   size: 60.sp,
+                    //   color: AppColor.whitecolor,
+                    // ),
+                    Image(
+                      image: AssetImage('assets/images/muscle.png'),
+                      height: 60.h,
+                      color: AppColor.whitecolor.withOpacity(0.7),
                     ),
-                    Text(
-                      ' ALI Gym ',
-                      style: TextStyle(
-                        fontSize: 30.sp,
-                        color: AppColor.whitecolor,
+                    Padding(
+                      padding: EdgeInsets.only(right: 7.0.w),
+                      child: Text(
+                        ' ALI Gym ',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: AppColor.whitecolor,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 50.h),
+                SizedBox(height: 40.h),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(180.w, 50.h),

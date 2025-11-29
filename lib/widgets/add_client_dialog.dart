@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
+import 'package:gym_manager/widgets/snakbar.dart';
 import 'package:provider/provider.dart';
 import '../models/client.dart';
 import 'package:intl/intl.dart';
@@ -111,13 +112,8 @@ class _AddClientDialogState extends State<AddClientDialog> {
           child: Text("Add"),
           onPressed: () {
             if (_nameController.text.isEmpty || _phoneController.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.greenAccent,
-                  content: Text("Please fill all fields"),
-                ),
-              );
-              return;
+              CustomSnackBar.showError(context, "Please fill all fields");
+              return Navigator.pop(context);
             }
 
             final newClient = Client(
@@ -132,6 +128,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
               context,
               listen: false,
             ).addClient(newClient);
+            CustomSnackBar.showSuccess(context, 'Client added successfully');
             Navigator.pop(context);
           },
         ),

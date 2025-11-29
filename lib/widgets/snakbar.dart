@@ -5,6 +5,7 @@ import 'package:gym_manager/const/colors.dart';
 class CustomSnackBar {
   static void showSuccess(BuildContext context, String message) {
     _showSnackBar(
+      myimage: Image(image: AssetImage('assets/images/app.png')),
       context,
       message,
       backgroundColor: AppColor.successcolor.shade600,
@@ -14,6 +15,7 @@ class CustomSnackBar {
 
   static void showError(BuildContext context, String message) {
     _showSnackBar(
+      myimage: Image(image: AssetImage('assets/images/gym.png')),
       context,
       message,
       backgroundColor: AppColor.warningcolor.shade600,
@@ -23,6 +25,7 @@ class CustomSnackBar {
 
   static void showWarning(BuildContext context, String message) {
     _showSnackBar(
+      myimage: Image(image: AssetImage('assets/images/fitness.png')),
       context,
       message,
       backgroundColor: Colors.orange.shade600,
@@ -32,6 +35,7 @@ class CustomSnackBar {
 
   static void showInfo(BuildContext context, String message) {
     _showSnackBar(
+      myimage: Image(image: AssetImage('assets/images/fitness.png')),
       context,
       message,
       backgroundColor: Colors.blue.shade600,
@@ -44,9 +48,11 @@ class CustomSnackBar {
     String message, {
     required Color backgroundColor,
     required IconData icon,
+    required Image myimage,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        showCloseIcon: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
@@ -68,22 +74,21 @@ class CustomSnackBar {
             children: [
               Icon(icon, color: Colors.white, size: 24),
               SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  message,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
+              Text(
+                message,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.close, color: Colors.white, size: 18),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
+              Container(height: 50.h, width: 50.w, child: myimage),
+              // IconButton(
+              //   icon: Icon(Icons.close, color: Colors.white, size: 18),
+              //   onPressed: () {
+              //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              //   },
+              // ),
             ],
           ),
         ),

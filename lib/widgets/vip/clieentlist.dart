@@ -59,6 +59,7 @@ class _ClieentlistState extends State<Clieentlist> {
 
   Widget _buildClientCard(VipClient client, VipClientViewModel viewModel) {
     return Card(
+      color: Colors.grey.shade200,
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: InkWell(
         onTap: () => _showClientDetailsDialog(context, client, viewModel),

@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               );
                                             },
                                             child: StatCard(
-                                              color: Colors.blue,
+                                              color: AppColor.blackcolor,
                                               title: "Total Clients",
                                               value: value.clients.length
                                                   .toString(),
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Consumer<ClientViewModel>(
                                       builder: (context, value, child) =>
                                           StatCard(
-                                            color: AppColor.blackcolor,
+                                            color: AppColor.successcolor,
                                             title: "Active",
                                             value:
                                                 (value.clients.length -
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               );
                                             },
                                             child: StatCard(
-                                              color: Colors.red,
+                                              color: AppColor.warningcolor,
                                               title: "Expired",
                                               value: value.expiredClients.length
                                                   .toString(),
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               );
                                             },
                                             child: StatCard(
-                                              color: Colors.green,
+                                              color: Colors.blue.shade900,
                                               title: "Today Revenue",
                                               value:
                                                   revValue.total.toString() +

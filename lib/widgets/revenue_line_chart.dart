@@ -105,7 +105,7 @@ class RevenueLineChart extends StatelessWidget {
               spots: spots,
               isCurved: true,
               gradient: LinearGradient(
-                colors: [Colors.blueAccent, Colors.lightBlueAccent],
+                colors: [Colors.blueAccent, Colors.blue.shade900],
               ),
               barWidth: 4,
               isStrokeCapRound: true,

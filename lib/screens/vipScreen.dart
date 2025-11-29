@@ -189,6 +189,14 @@ void showAddClientDialog(BuildContext context) async {
                   );
                   return;
                 }
+                if (double.parse(ageController.text) < 14 ||
+                    double.parse(ageController.text) > 80) {
+                  CustomSnackBar.showWarning(
+                    context,
+                    'Please enter a valid age between 14 and 80',
+                  );
+                  return;
+                }
 
                 final weight = double.tryParse(weightController.text);
                 if (weight == null || weight <= 30) {
