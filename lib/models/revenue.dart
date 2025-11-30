@@ -6,6 +6,7 @@ class Revenue {
   final int subscriptionSales;
   final int wheySales;
   final int total;
+  final int vipSubscriptionSales;
 
   Revenue({
     this.id,
@@ -14,7 +15,13 @@ class Revenue {
     required this.sessionSales,
     required this.subscriptionSales,
     required this.wheySales,
-  }) : total = waterSales + sessionSales + subscriptionSales + wheySales;
+    this.vipSubscriptionSales = 0,
+  }) : total =
+           waterSales +
+           sessionSales +
+           subscriptionSales +
+           wheySales +
+           vipSubscriptionSales;
 
   /// Convert DateTime to SQL Date Format: YYYY-MM-DD
   String _toSqlDate(DateTime d) {
@@ -31,6 +38,7 @@ class Revenue {
     'subscription_sales': subscriptionSales,
     'whey_sales': wheySales,
     'total': total,
+    'vip_subscription_sales': vipSubscriptionSales,
   };
 
   factory Revenue.fromMap(Map<String, dynamic> m) => Revenue(
@@ -40,5 +48,6 @@ class Revenue {
     sessionSales: m['session_sales'],
     subscriptionSales: m['subscription_sales'],
     wheySales: m['whey_sales'] ?? 0,
+    vipSubscriptionSales: m['vip_subscription_sales'] ?? 0,
   );
 }

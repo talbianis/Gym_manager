@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym_manager/screens/homeScreen.dart';
+import 'package:gym_manager/screens/splashscree.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
 import 'package:gym_manager/view_models/vip_viewmodel.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Gym Manager",
 
-        home: HomeScreen(),
+        home: SplashScreen(),
       ),
     );
   }

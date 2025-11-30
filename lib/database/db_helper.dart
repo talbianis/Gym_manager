@@ -140,7 +140,7 @@ class DBHelper {
     return await dbFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 2, // ⭐ IMPORTANT: Upgrade the DB version
+        version: 3, // ⭐ IMPORTANT: Upgrade the DB version
         onCreate: (db, version) async {
           // CLIENTS TABLE
           await db.execute("""
@@ -163,7 +163,8 @@ class DBHelper {
               session_sales INTEGER DEFAULT 0,
               subscription_sales INTEGER DEFAULT 0,
               whey_sales INTEGER DEFAULT 0,
-              total INTEGER DEFAULT 0
+              total INTEGER DEFAULT 0,
+              vip_subscription_sales INTEGER DEFAULT 0
             )
           """);
 

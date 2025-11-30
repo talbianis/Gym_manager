@@ -10,6 +10,11 @@ class RevenueViewModel extends ChangeNotifier {
     RevenueItem(key: 'whey', label: 'Whey Dose', price: 250),
     RevenueItem(key: 'session', label: 'Single Session', price: 150),
     RevenueItem(key: 'subscription', label: 'Subscription', price: 1200),
+    RevenueItem(
+      key: 'vip_subscription',
+      label: 'VIP Subscription',
+      price: 2500,
+    ),
   ];
 
   bool isSaving = false;
@@ -66,6 +71,7 @@ class RevenueViewModel extends ChangeNotifier {
       sessionSales: totalByKey('session'),
       subscriptionSales: totalByKey('subscription'),
       wheySales: totalByKey('whey'),
+      vipSubscriptionSales: totalByKey('vip_subscription'),
     );
 
     if (existing != null) {
@@ -99,6 +105,10 @@ class RevenueViewModel extends ChangeNotifier {
       items.firstWhere((i) => i.key == 'subscription').count =
           (existing.subscriptionSales /
                   items.firstWhere((i) => i.key == 'subscription').price)
+              .round();
+      items.firstWhere((i) => i.key == 'vip_subscription').count =
+          (existing.vipSubscriptionSales /
+                  items.firstWhere((i) => i.key == 'vip_subscription').price)
               .round();
     } else {
       resetCounts();
