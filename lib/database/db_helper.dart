@@ -1,121 +1,12 @@
-// import 'package:path/path.dart';
-// import 'package:sqflite/sqflite.dart';
-
-// import 'package:gym_manager/models/revenue.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-// class DBHelper {
-//   static Database? _db;
-
-//   // Open DB
-//   static Future<Database> get database async {
-//     if (_db != null) return _db!;
-//     _db = await initDB();
-//     return _db!;
-//   }
-
-//   // Init DB
-//   static Future<Database> initDB() async {
-//     final dbFactory = databaseFactoryFfi;
-//     final dbPath = await dbFactory.getDatabasesPath();
-//     final path = join(dbPath, "gym_manager.db");
-
-//     return await dbFactory.openDatabase(
-//       path,
-//       options: OpenDatabaseOptions(
-//         version: 1,
-//         onCreate: (db, version) async {
-//           // CLIENTS TABLE
-//           await db.execute("""
-//             CREATE TABLE clients (
-//               id INTEGER PRIMARY KEY AUTOINCREMENT,
-//               name TEXT,
-//               phone TEXT,
-//               start_date TEXT,
-//               end_date TEXT,
-//               subscription_type TEXT
-//             )
-//           """);
-
-//           // REVENUES TABLE
-//           await db.execute("""
-//             CREATE TABLE revenues (
-//               id INTEGER PRIMARY KEY AUTOINCREMENT,
-//               date TEXT,
-//               water_sales INTEGER DEFAULT 0,
-//               session_sales INTEGER DEFAULT 0,
-//               subscription_sales INTEGER DEFAULT 0,
-//               whey_sales INTEGER DEFAULT 0,
-//               total INTEGER DEFAULT 0
-//             )
-//           """);
-//         },
-//       ),
-//     );
-//   }
-
-//   // ------------------ REVENUE FUNCTIONS -----------------------
-
-//   // Insert a revenue day
-//   static Future<int> insertRevenue(Revenue r) async {
-//     final db = await DBHelper.database;
-//     return await db.insert('revenues', r.toMap());
-//   }
-
-//   // Get revenue by date (yyyy-MM-dd)
-//   static Future<Revenue?> getRevenueByDate(DateTime date) async {
-//     final db = await DBHelper.database;
-//     final iso = DateTime(date.year, date.month, date.day).toIso8601String();
-
-//     final result = await db.query(
-//       'revenues',
-//       where: "date LIKE ?",
-//       whereArgs: ['$iso%'],
-//       limit: 1,
-//     );
-
-//     if (result.isEmpty) return null;
-//     return Revenue.fromMap(result.first);
-//   }
-
-//   // Update revenue for today
-//   static Future<int> updateRevenue(Revenue r) async {
-//     final db = await DBHelper.database;
-//     return await db.update(
-//       'revenues',
-//       r.toMap(),
-//       where: "id = ?",
-//       whereArgs: [r.id],
-//     );
-//   }
-
-//   // Last N days
-//   static Future<Map<String, int>> getDailyRevenueLast30Days() async {
-//     final db = await DBHelper.database;
-
-//     final result = await db.rawQuery('''
-//     SELECT date, SUM(total) as total
-//     FROM revenues
-//     WHERE date BETWEEN date('now', '-29 days') AND date('now')
-//     GROUP BY date
-//     ORDER BY date ASC
-//     ''');
-
-//     Map<String, int> data = {};
-//     for (var row in result) {
-//       data[row['date'] as String] = row['total'] != null
-//           ? row['total'] as int
-//           : 0;
-//     }
-
-//     return data;
-//   }
-// }
+import 'package:gym_manager/models/auth.dart';
 import 'package:gym_manager/models/vipclient.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:gym_manager/models/revenue.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class DBHelper {
   static Database? _db;
@@ -140,7 +31,7 @@ class DBHelper {
     return await dbFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 3, // ⭐ IMPORTANT: Upgrade the DB version
+        version: 4, // ⭐ UPDATED VERSION
         onCreate: (db, version) async {
           // CLIENTS TABLE
           await db.execute("""
@@ -168,18 +59,137 @@ class DBHelper {
             )
           """);
 
-          // ⭐ CREATE VIP TABLE
+          // VIP CLIENTS TABLE
           await _createVipClientsTable(db);
+
+          // ⭐ USERS TABLE (for login)
+          await _createUsersTable(db);
+
+          // Create default admin user
+          await _createDefaultAdmin(db);
         },
 
         onUpgrade: (db, oldVersion, newVersion) async {
-          // When updating from v1 → v2, create VIP table
           if (oldVersion < 2) {
             await _createVipClientsTable(db);
+          }
+          if (oldVersion < 4) {
+            await _createUsersTable(db);
+            await _createDefaultAdmin(db);
           }
         },
       ),
     );
+  }
+
+  // ------------------------------------------------------
+  // CREATE USERS TABLE
+  // ------------------------------------------------------
+  static Future<void> _createUsersTable(Database db) async {
+    await db.execute("""
+      CREATE TABLE users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      )
+    """);
+  }
+
+  // ------------------------------------------------------
+  // CREATE DEFAULT ADMIN USER
+  // ------------------------------------------------------
+  static Future<void> _createDefaultAdmin(Database db) async {
+    final defaultUsername = 'ali';
+    final defaultPassword = 'ali2026';
+    final passwordHash = _hashPassword(defaultPassword);
+
+    await db.insert('users', {
+      'username': defaultUsername,
+      'password_hash': passwordHash,
+      'created_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  // ------------------------------------------------------
+  // PASSWORD HASHING
+  // ------------------------------------------------------
+  static String _hashPassword(String password) {
+    final bytes = utf8.encode(password);
+    final hash = sha256.convert(bytes);
+    return hash.toString();
+  }
+
+  // ------------------------------------------------------
+  // USER AUTHENTICATION FUNCTIONS
+  // ------------------------------------------------------
+
+  /// Login user - returns User object if successful, null otherwise
+  static Future<User?> loginUser(String username, String password) async {
+    final db = await database;
+    final passwordHash = _hashPassword(password);
+
+    final result = await db.query(
+      'users',
+      where: 'username = ? AND password_hash = ?',
+      whereArgs: [username, passwordHash],
+    );
+
+    if (result.isEmpty) return null;
+    return User.fromMap(result.first);
+  }
+
+  /// Register new user
+  static Future<int> registerUser(String username, String password) async {
+    final db = await database;
+    final passwordHash = _hashPassword(password);
+
+    return await db.insert('users', {
+      'username': username,
+      'password_hash': passwordHash,
+      'created_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  /// Check if username exists
+  static Future<bool> usernameExists(String username) async {
+    final db = await database;
+    final result = await db.query(
+      'users',
+      where: 'username = ?',
+      whereArgs: [username],
+    );
+    return result.isNotEmpty;
+  }
+
+  /// Change password
+  static Future<bool> changePassword(
+    int userId,
+    String oldPassword,
+    String newPassword,
+  ) async {
+    final db = await database;
+    final oldHash = _hashPassword(oldPassword);
+    final newHash = _hashPassword(newPassword);
+
+    // Verify old password
+    final result = await db.query(
+      'users',
+      where: 'id = ? AND password_hash = ?',
+      whereArgs: [userId, oldHash],
+    );
+
+    if (result.isEmpty) return false;
+
+    // Update to new password
+    await db.update(
+      'users',
+      {'password_hash': newHash},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+
+    return true;
   }
 
   // ------------------------------------------------------
@@ -193,7 +203,7 @@ class DBHelper {
         age INTEGER NOT NULL,
         phone TEXT NOT NULL,
         photo TEXT,
-        weights TEXT NOT NULL,     -- JSON string of weight history
+        weights TEXT NOT NULL,
         start_date TEXT NOT NULL,
         end_date TEXT NOT NULL,
         created_at TEXT NOT NULL

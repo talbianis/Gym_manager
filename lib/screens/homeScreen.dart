@@ -32,8 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.mainColor,
-
+      backgroundColor: Colors.grey.shade100,
       body: Container(
         color: AppColor.mainColor,
         child: Row(
@@ -50,13 +49,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Gym Manager Dashboard',
-                            style: TextStyle(
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Gym Manager Dashboard',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              CircleAvatar(
+                                backgroundImage: AssetImage(
+                                  'assets/images/ali.jpg',
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(height: 10.h),

@@ -83,6 +83,7 @@ class RevenueViewModel extends ChangeNotifier {
     await DBHelper.insertRevenue(revenue);
 
     isSaving = false;
+    print('i succesuflu save to db ');
     notifyListeners();
   }
 
@@ -128,6 +129,7 @@ class RevenueViewModel extends ChangeNotifier {
           "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
 
       finalData.add(dbData[dateString] ?? 0);
+      print('loaded data');
     }
 
     return finalData;

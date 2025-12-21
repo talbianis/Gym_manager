@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/screens/expired_client.dart';
+import 'package:gym_manager/screens/login.dart';
 import 'package:gym_manager/screens/vipScreen.dart';
 import '../screens/clients_screen.dart';
 import '../screens/revenue_screen.dart';
@@ -14,22 +15,21 @@ class SideBar extends StatelessWidget {
       child: Stack(
         children: [
           // Background Image
+          // Container(
+          //   width: 200.w,
+          //   decoration: BoxDecoration(
+          //     color: const Color.fromARGB(255, 3, 28, 48),
+          //     image: DecorationImage(
+          //       alignment: AlignmentDirectional(-0.60, 1),
+          //       image: AssetImage('assets/images/ali.jpg'),
+          //       fit: BoxFit.cover,
+          //       opacity: 0.6,
+          //     ),
+          //   ),
+          // ),
           Container(
             width: 200.w,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 27, 25, 80),
-              image: DecorationImage(
-                alignment: AlignmentDirectional(-0.60, 1),
-                image: AssetImage('assets/images/ali.jpg'),
-                fit: BoxFit.cover,
-                opacity: 0.6,
-              ),
-            ),
-          ),
-
-          Container(
-            width: 200.w,
-            color: Colors.transparent,
+            color: AppColor.mainColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -146,6 +146,37 @@ class SideBar extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 18.sp,
                     ),
+                  ),
+                ),
+                SizedBox(height: 80.h),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    maximumSize: Size(180.w, 50.h),
+                    minimumSize: Size(100.w, 50.h),
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginScreen()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.logout),
+                      SizedBox(width: 10),
+                      Text(
+                        "Log Out",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
