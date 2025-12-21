@@ -4,6 +4,7 @@ import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/screens/expired_client.dart';
 import 'package:gym_manager/screens/login.dart';
 import 'package:gym_manager/screens/vipScreen.dart';
+
 import '../screens/clients_screen.dart';
 import '../screens/revenue_screen.dart';
 
@@ -29,7 +30,13 @@ class SideBar extends StatelessWidget {
           // ),
           Container(
             width: 200.w,
-            color: AppColor.mainColor,
+            decoration: BoxDecoration(
+              color: AppColor.mainColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30.r),
+                bottomRight: Radius.circular(30.r),
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -47,48 +54,61 @@ class SideBar extends StatelessWidget {
                       height: 60.h,
                       color: AppColor.whitecolor.withOpacity(0.7),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 7.0.w),
-                      child: Text(
-                        ' ALI Gym ',
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                          color: AppColor.whitecolor,
-                        ),
+
+                    Text(
+                      ' ALI Gym ',
+                      style: TextStyle(
+                        fontSize: 30.sp,
+                        color: AppColor.whitecolor,
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 40.h),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(180.w, 50.h),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     minimumSize: Size(180.w, 50.h),
+                //     backgroundColor: Colors.white,
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //   ),
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (_) => ClientsScreen()),
+                //     );
+                //   },
+                //   child: const Text(
+                //     "Clients",
+                //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //   ),
+                // ),
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => ClientsScreen()),
                     );
                   },
-                  child: const Text(
-                    "Clients",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Text(
+                    'Client',
+                    style: TextStyle(
+                      color: AppColor.whitecolor,
+                      fontSize: 20.sp,
+                    ),
                   ),
                 ),
 
+                Divider(
+                  color: AppColor.whitecolor,
+                  indent: 15.w,
+                  endIndent: 15.w,
+                ),
+
                 SizedBox(height: 20.h),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(180.w, 50.h),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -96,44 +116,43 @@ class SideBar extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Daily Revenue",
+                    'Daily Revenue',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.sp,
+                      color: AppColor.whitecolor,
+                      fontSize: 20.sp,
                     ),
                   ),
                 ),
+                Divider(
+                  color: AppColor.whitecolor,
+                  indent: 15.w,
+                  endIndent: 15.w,
+                ),
 
                 SizedBox(height: 20.h),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(180.w, 50.h),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => ExpiredClientsScreen()),
                     );
                   },
-                  child: const Text(
-                    "Expired Clients",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  child: Text(
+                    'Expired Clients',
+                    style: TextStyle(
+                      color: AppColor.whitecolor,
+                      fontSize: 20.sp,
+                    ),
                   ),
+                ),
+                Divider(
+                  color: AppColor.whitecolor,
+                  indent: 15.w,
+                  endIndent: 15.w,
                 ),
 
                 SizedBox(height: 20.h),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(180.w, 50.h),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -141,43 +160,38 @@ class SideBar extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    'VIP Clients',
+                    'Vip Clients',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.sp,
+                      color: AppColor.whitecolor,
+                      fontSize: 20.sp,
                     ),
                   ),
                 ),
+                Divider(
+                  color: AppColor.whitecolor,
+                  indent: 15.w,
+                  endIndent: 15.w,
+                ),
                 SizedBox(height: 80.h),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    maximumSize: Size(180.w, 50.h),
-                    minimumSize: Size(100.w, 50.h),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => LoginScreen()),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.logout),
-                      SizedBox(width: 10),
-                      Text(
-                        "Log Out",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    'Log Out`',
+                    style: TextStyle(
+                      color: AppColor.whitecolor,
+                      fontSize: 20.sp,
+                    ),
                   ),
+                ),
+                Divider(
+                  color: AppColor.whitecolor,
+                  indent: 15.w,
+                  endIndent: 15.w,
                 ),
 
                 const Spacer(),

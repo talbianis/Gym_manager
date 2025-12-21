@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Container(
-        color: AppColor.mainColor,
+        color: AppColor.greycolor.shade400,
         child: Row(
           children: [
             SideBar(),
@@ -57,13 +57,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   fontSize: 24.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: AppColor.whitecolor,
                                 ),
                               ),
-                              CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  'assets/images/ali.jpg',
-                                ),
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 25.r,
+                                    backgroundImage: AssetImage(
+                                      'assets/images/alilast2.jpg',
+                                    ),
+                                  ),
+                                  SizedBox(width: 15.w),
+                                  Text(
+                                    'Ali Ziainia',
+                                    style: TextStyle(
+                                      color: AppColor.whitecolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25.sp,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -142,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Consumer<RevenueViewModel>(
                                       builder: (context, revValue, child) =>
                                           GestureDetector(
-                                            onDoubleTap: () {
+                                            onTap: () {
                                               Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                   builder: (context) =>
