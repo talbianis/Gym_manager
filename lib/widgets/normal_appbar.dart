@@ -3,9 +3,13 @@ import 'package:gym_manager/const/colors.dart';
 
 class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onSearchPressed;
+  final String text;
 
-  const NormalAppBar({Key? key, required this.onSearchPressed})
-    : super(key: key);
+  const NormalAppBar({
+    Key? key,
+    required this.onSearchPressed,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -20,7 +24,7 @@ class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 100,
       backgroundColor: AppColor.mainColor,
       title: Text(
-        "Clients",
+        text,
         style: TextStyle(
           color: AppColor.whitecolor,
           fontWeight: FontWeight.w600,

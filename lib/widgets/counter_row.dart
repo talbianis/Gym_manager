@@ -49,7 +49,7 @@ class CounterRow extends StatelessWidget {
             ),
 
             Expanded(
-              flex: 1,
+              flex: 0,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[300],

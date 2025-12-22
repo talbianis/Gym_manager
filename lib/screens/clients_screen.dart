@@ -73,7 +73,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
               onClearSearch: _clearSearch,
               onSearchChanged: _onSearchChanged,
             )
-          : NormalAppBar(onSearchPressed: _startSearch),
+          : NormalAppBar(onSearchPressed: _startSearch, text: "Clients"),
 
       body: Consumer<ClientViewModel>(
         builder: (context, clientVM, child) {

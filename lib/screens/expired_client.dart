@@ -1,30 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
+import 'package:gym_manager/models/client.dart';
+import 'package:gym_manager/widgets/normal_appbar.dart';
+import 'package:gym_manager/widgets/search_appbar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../view_models/client_viewmodel.dart';
 
-class ExpiredClientsScreen extends StatelessWidget {
-  const ExpiredClientsScreen({super.key});
+class ExpiredClientsScreen extends StatefulWidget {
+  final Client? client;
+  const ExpiredClientsScreen({super.key, this.client});
+
+  @override
+  State<ExpiredClientsScreen> createState() => _ExpiredClientsScreenState();
+}
+
+class _ExpiredClientsScreenState extends State<ExpiredClientsScreen> {
+  final TextEditingController searchControllerexp = TextEditingController();
+  bool isSearchingexp = false;
+  @override
+  void dispose() {
+    searchControllerexp.dispose();
+    super.dispose();
+  }
+
+  void onSearchChangedexp(String query) {
+    Provider.of<ClientViewModel>(context, listen: false).searchClients(query);
+  }
+
+  void clearSearchexp() {
+    searchControllerexp.clear();
+    Provider.of<ClientViewModel>(context, listen: false).clearExpiredSearch();
+    setState(() {
+      isSearchingexp = false;
+    });
+  }
+
+  void onSearchChangedForExpired(String query) {
+    Provider.of<ClientViewModel>(
+      context,
+      listen: false,
+    ).searchExpiredClients(query);
+  }
+
+  void startSearch() {
+    setState(() {
+      isSearchingexp = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColor.whitecolor),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          "Expired Clients",
-          style: TextStyle(color: AppColor.whitecolor),
-        ),
-        backgroundColor: AppColor.mainColor,
-      ),
+      appBar: isSearchingexp
+          ? SearchAppBar(
+              searchController: searchControllerexp,
+              onClearSearch: clearSearchexp,
+              onSearchChanged: onSearchChangedForExpired,
+            )
+          : NormalAppBar(onSearchPressed: startSearch, text: "Expired Clients"),
 
+      //     : AppBar(
+
+      //         leading: IconButton(
+      //           icon: Icon(Icons.arrow_back, color: AppColor.whitecolor),
+      //           onPressed: () {
+      //             Navigator.pop(context);
+      //           },
+      //         ),
+      //         title: Text(
+      //           "Expired Clients",
+      //           style: TextStyle(color: AppColor.whitecolor),
+      //         ),
+      //           actions: [
+      //   Container(
+      //     margin: EdgeInsets.only(right: 12),
+      //     decoration: BoxDecoration(
+      //       color: Colors.grey.shade200,
+      //       shape: BoxShape.circle,
+      //     ),
+      //     child: IconButton(
+      //       icon: Icon(Icons.search, color: Colors.black87),
+      //       onPressed: onSearchPressed,
+      //     ),
+      //   ),
+      // ],
+      //   backgroundColor: AppColor.mainColor,
+      // ),
       body: Consumer<ClientViewModel>(
         builder: (context, vm, child) {
           final expired = vm.expiredClients;
@@ -58,10 +121,10 @@ class ExpiredClientsScreen extends StatelessWidget {
                       // Avatar
                       CircleAvatar(
                         radius: 28.r,
-                        backgroundColor: Colors.red.withOpacity(0.1),
+                        backgroundColor: AppColor.warningcolor.withOpacity(0.1),
                         child: Icon(
                           Icons.person,
-                          color: Colors.red,
+                          color: AppColor.warningcolor,
                           size: 30.sp,
                         ),
                       ),
@@ -90,13 +153,13 @@ class ExpiredClientsScreen extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.15),
+                                color: AppColor.warningcolor.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Text(
                                 "Expired",
                                 style: TextStyle(
-                                  color: Colors.red[700],
+                                  color: AppColor.warningcolor[700],
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -117,8 +180,12 @@ class ExpiredClientsScreen extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.warning_amber_rounded,
-                            color: Colors.red,
+                            color: AppColor.warningcolor,
                             size: 30.sp,
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Color(0xFFE53935)),
+                            onPressed: () => _showDeleteDialog(c, context),
                           ),
                         ],
                       ),
@@ -132,4 +199,27 @@ class ExpiredClientsScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showDeleteDialog(Client client, BuildContext context) {
+  final clientVM = Provider.of<ClientViewModel>(context, listen: false);
+
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text("Delete ${client.name}?"),
+      content: Text("Are you sure you want to delete this client?"),
+      actions: [
+        TextButton(child: Text("Cancel"), onPressed: () => Navigator.pop(ctx)),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+          child: Text("Delete"),
+          onPressed: () async {
+            await clientVM.deleteClient(client.id!);
+            Navigator.pop(ctx);
+          },
+        ),
+      ],
+    ),
+  );
 }

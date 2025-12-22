@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/screens/expired_client.dart';
-import 'package:gym_manager/screens/login.dart';
+
 import 'package:gym_manager/screens/vipScreen.dart';
+import 'package:gym_manager/widgets/dialogcustom.dart';
 
 import '../screens/clients_screen.dart';
 import '../screens/revenue_screen.dart';
@@ -91,12 +92,19 @@ class SideBar extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => ClientsScreen()),
                     );
                   },
-                  child: Text(
-                    'Client',
-                    style: TextStyle(
-                      color: AppColor.whitecolor,
-                      fontSize: 20.sp,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person, color: AppColor.whitecolor),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Client',
+                        style: TextStyle(
+                          color: AppColor.whitecolor,
+                          fontSize: 20.sp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -115,12 +123,19 @@ class SideBar extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => RevenueScreen()),
                     );
                   },
-                  child: Text(
-                    'Daily Revenue',
-                    style: TextStyle(
-                      color: AppColor.whitecolor,
-                      fontSize: 20.sp,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.money, color: AppColor.whitecolor),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Daily Revenue',
+                        style: TextStyle(
+                          color: AppColor.whitecolor,
+                          fontSize: 20.sp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Divider(
@@ -137,12 +152,22 @@ class SideBar extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => ExpiredClientsScreen()),
                     );
                   },
-                  child: Text(
-                    'Expired Clients',
-                    style: TextStyle(
-                      color: AppColor.whitecolor,
-                      fontSize: 20.sp,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: AppColor.whitecolor,
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Expired Clients',
+                        style: TextStyle(
+                          color: AppColor.whitecolor,
+                          fontSize: 20.sp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Divider(
@@ -159,12 +184,19 @@ class SideBar extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => VipClientsScreen()),
                     );
                   },
-                  child: Text(
-                    'Vip Clients',
-                    style: TextStyle(
-                      color: AppColor.whitecolor,
-                      fontSize: 20.sp,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star, color: AppColor.whitecolor),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Vip Clients',
+                        style: TextStyle(
+                          color: AppColor.whitecolor,
+                          fontSize: 20.sp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Divider(
@@ -175,17 +207,30 @@ class SideBar extends StatelessWidget {
                 SizedBox(height: 80.h),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()),
+                    showDialog(
+                      context: context,
+                      builder: (context) => CustomDialog(
+                        title: 'Log Out',
+                        message: 'Are you sure you want to log out?',
+                      ),
                     );
                   },
-                  child: Text(
-                    'Log Out`',
-                    style: TextStyle(
-                      color: AppColor.whitecolor,
-                      fontSize: 20.sp,
-                    ),
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (_) => LoginScreen()),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.logout, color: AppColor.whitecolor),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Log Out',
+                        style: TextStyle(
+                          color: AppColor.whitecolor,
+                          fontSize: 20.sp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Divider(

@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class NormalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onSearchPressed;
+  final String text;
 
-  const NormalAppBar({super.key, required this.onSearchPressed});
+  const NormalAppBar({
+    super.key,
+    required this.onSearchPressed,
+    required this.text,
+  });
 
   @override
   Size get preferredSize => Size.fromHeight(110);
