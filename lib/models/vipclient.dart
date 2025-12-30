@@ -7,6 +7,8 @@ class VipClient {
   final String? photo;
   final String phone;
   final List<WeightEntry> weights;
+  final int height;
+
   final DateTime startDate;
   final DateTime endDate;
   final DateTime createdAt;
@@ -18,6 +20,7 @@ class VipClient {
     this.photo,
     required this.phone,
     required this.weights,
+    required this.height,
     required this.startDate,
     required this.endDate,
     DateTime? createdAt,
@@ -64,6 +67,7 @@ class VipClient {
       'photo': photo,
       'phone': phone,
       'weights': _weightsToJson(weights),
+      'height': height,
       'start_date': startDate.toIso8601String(),
       'end_date': endDate.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
@@ -78,6 +82,7 @@ class VipClient {
       photo: map['photo'],
       phone: map['phone'],
       weights: _weightsFromJson(map['weights']),
+      height: map['height'],
       startDate: DateTime.parse(map['start_date']),
       endDate: DateTime.parse(map['end_date']),
       createdAt: DateTime.parse(map['created_at']),
@@ -100,6 +105,8 @@ class VipClient {
     String? photo,
     String? phone,
     List<WeightEntry>? weights,
+    int? height,
+
     DateTime? startDate,
     DateTime? endDate,
     DateTime? createdAt,
@@ -111,6 +118,8 @@ class VipClient {
       photo: photo ?? this.photo,
       phone: phone ?? this.phone,
       weights: weights ?? this.weights,
+      height: height ?? this.height,
+
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       createdAt: createdAt ?? this.createdAt,
@@ -131,7 +140,7 @@ class WeightEntry {
   factory WeightEntry.fromMap(Map<String, dynamic> map) {
     return WeightEntry(
       date: DateTime.parse(map['date']),
-      weight: map['weight'].toDouble(),
+      weight: (map['weight'] as num).toDouble(),
     );
   }
 }

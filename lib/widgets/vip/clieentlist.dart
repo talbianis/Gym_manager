@@ -227,6 +227,10 @@ class _ClieentlistState extends State<Clieentlist> {
                 '${client.endDate.day}/${client.endDate.month}/${client.endDate.year}',
               ),
               const Divider(),
+              _buildDetailRow('Height', '${client.height} cm'),
+
+              const Divider(),
+
               const Text(
                 'Weight History',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

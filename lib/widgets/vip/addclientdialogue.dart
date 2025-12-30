@@ -11,6 +11,7 @@ class DialogUtils {
     final ageController = TextEditingController();
     final phoneController = TextEditingController();
     final weightController = TextEditingController();
+    final heightController = TextEditingController();
 
     DateTime startDate = DateTime.now();
     DateTime endDate = DateTime.now().add(const Duration(days: 30));
@@ -114,7 +115,8 @@ class DialogUtils {
                   if (nameController.text.isEmpty ||
                       ageController.text.isEmpty ||
                       phoneController.text.isEmpty ||
-                      weightController.text.isEmpty) {
+                      weightController.text.isEmpty ||
+                      heightController.text.isEmpty) {
                     CustomSnackBar.showError(
                       context,
                       'Please fill all required fields',
@@ -136,6 +138,7 @@ class DialogUtils {
                   ];
 
                   final client = VipClient(
+                    height: int.parse(heightController.text),
                     name: nameController.text,
                     age: int.parse(ageController.text),
                     phone: phoneController.text,

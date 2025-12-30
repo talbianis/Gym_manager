@@ -79,6 +79,7 @@ void showAddClientDialog(BuildContext context) async {
   final ageController = TextEditingController();
   final phoneController = TextEditingController();
   final weightController = TextEditingController();
+  final heightcontroller = TextEditingController();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 30));
@@ -124,6 +125,16 @@ void showAddClientDialog(BuildContext context) async {
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: 'Initial Weight (kg)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                TextField(
+                  controller: heightcontroller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Height (cm)',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -218,6 +229,7 @@ void showAddClientDialog(BuildContext context) async {
                   weights: weights,
                   startDate: startDate,
                   endDate: endDate,
+                  height: int.parse(heightcontroller.text),
                 );
 
                 final success = await Provider.of<VipClientViewModel>(
