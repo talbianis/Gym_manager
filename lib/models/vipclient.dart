@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 class VipClient {
   final int? id;
@@ -6,7 +9,11 @@ class VipClient {
   final int age;
   final String? photo;
   final String phone;
+
+  /// Weight history
   final List<WeightEntry> weights;
+
+  /// Height in centimeters
   final int height;
 
   final DateTime startDate;
@@ -26,6 +33,10 @@ class VipClient {
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
+  // ------------------------------------------------------
+  // STATUS
+  // ------------------------------------------------------
+
   bool get isActive {
     final now = DateTime.now();
     return now.isAfter(startDate) && now.isBefore(endDate);
@@ -40,24 +51,74 @@ class VipClient {
     return endDate.difference(DateTime.now()).inDays;
   }
 
+  // ------------------------------------------------------
+  // WEIGHT LOGIC
+  // ------------------------------------------------------
+
+  /// Latest weight (most recent entry)
   double? get latestWeight {
     if (weights.isEmpty) return null;
-    final sortedWeights = List<WeightEntry>.from(weights);
-    sortedWeights.sort((a, b) => b.date.compareTo(a.date));
-    return sortedWeights.first.weight;
+    final sorted = List<WeightEntry>.from(weights)
+      ..sort((a, b) => b.date.compareTo(a.date));
+    return sorted.first.weight;
   }
 
+  /// First recorded weight
   double? get initialWeight {
     if (weights.isEmpty) return null;
-    final sortedWeights = List<WeightEntry>.from(weights);
-    sortedWeights.sort((a, b) => a.date.compareTo(b.date));
-    return sortedWeights.first.weight;
+    final sorted = List<WeightEntry>.from(weights)
+      ..sort((a, b) => a.date.compareTo(b.date));
+    return sorted.first.weight;
   }
 
+  /// Weight progress (latest - initial)
   double? get weightProgress {
     if (initialWeight == null || latestWeight == null) return null;
     return latestWeight! - initialWeight!;
   }
+
+  Color bmiColor(double bmi) {
+    if (bmi < 18.5) return Colors.blue;
+    if (bmi < 25) return Colors.green;
+    if (bmi < 30) return Colors.orange;
+    return Colors.red;
+  }
+
+  double bmiFromWeight(double weight) {
+    final heightMeters = height / 100;
+    return weight / (heightMeters * heightMeters);
+  }
+
+  List<BmiPoint> get bmiHistory {
+    return weights.map((w) {
+      return BmiPoint(date: w.date, bmi: bmiFromWeight(w.weight));
+    }).toList()..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  // ------------------------------------------------------
+  // BMI (NEW FEATURE)
+  // ------------------------------------------------------
+
+  /// Body Mass Index
+  double? get bmi {
+    if (latestWeight == null || height <= 0) return null;
+    final heightInMeters = height / 100;
+    return latestWeight! / (heightInMeters * heightInMeters);
+  }
+
+  /// BMI category (optional but useful)
+  String get bmiCategory {
+    final value = bmi;
+    if (value == null) return 'Not available';
+    if (value < 18.5) return 'Underweight';
+    if (value < 25) return 'Normal';
+    if (value < 30) return 'Overweight';
+    return 'Obese';
+  }
+
+  // ------------------------------------------------------
+  // DATABASE MAPPING
+  // ------------------------------------------------------
 
   Map<String, dynamic> toMap() {
     return {
@@ -89,13 +150,17 @@ class VipClient {
     );
   }
 
+  // ------------------------------------------------------
+  // HELPERS
+  // ------------------------------------------------------
+
   static String _weightsToJson(List<WeightEntry> weights) {
     return jsonEncode(weights.map((w) => w.toMap()).toList());
   }
 
-  static List<WeightEntry> _weightsFromJson(String weightsJson) {
-    final List<dynamic> decoded = jsonDecode(weightsJson);
-    return decoded.map((w) => WeightEntry.fromMap(w)).toList();
+  static List<WeightEntry> _weightsFromJson(String json) {
+    final List decoded = jsonDecode(json);
+    return decoded.map((e) => WeightEntry.fromMap(e)).toList();
   }
 
   VipClient copyWith({
@@ -106,7 +171,6 @@ class VipClient {
     String? phone,
     List<WeightEntry>? weights,
     int? height,
-
     DateTime? startDate,
     DateTime? endDate,
     DateTime? createdAt,
@@ -119,13 +183,23 @@ class VipClient {
       phone: phone ?? this.phone,
       weights: weights ?? this.weights,
       height: height ?? this.height,
-
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       createdAt: createdAt ?? this.createdAt,
     );
   }
 }
+
+class BmiPoint {
+  final DateTime date;
+  final double bmi;
+
+  BmiPoint({required this.date, required this.bmi});
+}
+
+// ------------------------------------------------------
+// WEIGHT ENTRY MODEL
+// ------------------------------------------------------
 
 class WeightEntry {
   final DateTime date;

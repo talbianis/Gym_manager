@@ -6,6 +6,8 @@ import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/models/vipclient.dart';
 import 'package:gym_manager/view_models/vip_viewmodel.dart';
 import 'package:gym_manager/widgets/snakbar.dart';
+import 'package:gym_manager/widgets/vip/bmichart.dart';
+
 import 'package:provider/provider.dart';
 
 class Clieentlist extends StatefulWidget {
@@ -204,7 +206,13 @@ class _ClieentlistState extends State<Clieentlist> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(client.name),
+        title: Text(
+          client.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppColor.mainColor,
+          ),
+        ),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,17 +239,18 @@ class _ClieentlistState extends State<Clieentlist> {
 
               const Divider(),
 
-              const Text(
+              Text(
                 'Weight History',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
               ),
-              const SizedBox(height: 8),
+
+              SizedBox(height: 8.h),
               if (client.weights.isEmpty)
                 const Text('No weight records')
               else
                 ...client.weights.map(
                   (w) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: EdgeInsets.symmetric(vertical: 4.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -251,6 +260,7 @@ class _ClieentlistState extends State<Clieentlist> {
                     ),
                   ),
                 ),
+
               if (client.weightProgress != null) ...[
                 const Divider(),
                 _buildDetailRow(
@@ -260,6 +270,18 @@ class _ClieentlistState extends State<Clieentlist> {
                       ? Colors.green
                       : Colors.orange,
                 ),
+                const Divider(),
+                _buildDetailRow(
+                  'BMI',
+                  client.bmi != null
+                      ? '${client.bmi!.toStringAsFixed(1)} (${client.bmiCategory})'
+                      : 'Not available',
+                  color: client.bmi != null
+                      ? client.bmiColor(client.bmi!)
+                      : Colors.grey,
+                ),
+                SizedBox(height: 16.h),
+                BmiTrendChart(client: client),
               ],
             ],
           ),
@@ -282,7 +304,7 @@ class _ClieentlistState extends State<Clieentlist> {
 
   Widget _buildDetailRow(String label, String value, {Color? color}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -299,6 +321,7 @@ class _ClieentlistState extends State<Clieentlist> {
     VipClientViewModel viewModel,
   ) {
     final weightController = TextEditingController();
+
     DateTime selectedDate = DateTime.now();
 
     showDialog(
@@ -318,7 +341,7 @@ class _ClieentlistState extends State<Clieentlist> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 ListTile(
                   title: const Text('Date'),
                   subtitle: Text(

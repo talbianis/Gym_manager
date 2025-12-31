@@ -200,6 +200,21 @@ void showAddClientDialog(BuildContext context) async {
                   );
                   return;
                 }
+                if (heightcontroller.text.isEmpty) {
+                  CustomSnackBar.showError(
+                    context,
+                    'Please enter a valid height',
+                  );
+                  return;
+                }
+                if (double.parse(heightcontroller.text) < 100 ||
+                    double.parse(heightcontroller.text) > 250) {
+                  CustomSnackBar.showWarning(
+                    context,
+                    'Please enter a valid height between 100 cm and 250 cm',
+                  );
+                  return;
+                }
                 if (double.parse(ageController.text) < 14 ||
                     double.parse(ageController.text) > 80) {
                   CustomSnackBar.showWarning(
