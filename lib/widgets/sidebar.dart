@@ -13,6 +13,7 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
       width: 200.w,
       child: Stack(
         children: [
@@ -93,7 +94,7 @@ class SideBar extends StatelessWidget {
                     );
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.person, color: AppColor.whitecolor),
                       SizedBox(width: 10.w),
@@ -124,7 +125,7 @@ class SideBar extends StatelessWidget {
                     );
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.money, color: AppColor.whitecolor),
                       SizedBox(width: 10.w),
@@ -153,7 +154,7 @@ class SideBar extends StatelessWidget {
                     );
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(
                         Icons.warning_amber_rounded,
@@ -185,7 +186,7 @@ class SideBar extends StatelessWidget {
                     );
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.star, color: AppColor.whitecolor),
                       SizedBox(width: 10.w),
@@ -219,7 +220,7 @@ class SideBar extends StatelessWidget {
                   //   context,
                   //   MaterialPageRoute(builder: (_) => LoginScreen()),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.logout, color: AppColor.whitecolor),
                       SizedBox(width: 10.w),

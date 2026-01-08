@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/screens/splashscree.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
+import 'package:gym_manager/view_models/daili_expense_viewmodel.dart';
 import 'package:gym_manager/view_models/login_viewmodel.dart';
 import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
 import 'package:gym_manager/view_models/vip_viewmodel.dart';
@@ -19,6 +20,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => RevenueViewModel()),
         ChangeNotifierProvider(create: (_) => VipClientViewModel()),
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => DailyExpenseViewModel()),
       ],
       child: MyApp(),
     ),
