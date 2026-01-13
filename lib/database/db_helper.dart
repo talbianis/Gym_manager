@@ -106,6 +106,25 @@ class DBHelper {
     return data;
   }
 
+  static Future<Map<String, int>> getDailyExpenseLast30Days() async {
+    final db = await database;
+
+    final result = await db.rawQuery("""
+    SELECT date, SUM(amount) AS total
+    FROM daily_expenses
+    WHERE date BETWEEN date('now','-29 days') AND date('now')
+    GROUP BY date
+    ORDER BY date ASC
+  """);
+
+    Map<String, int> data = {};
+    for (var row in result) {
+      data[row['date'] as String] = (row['total'] ?? 0) as int;
+    }
+
+    return data;
+  }
+
   // ------------------------------------------------------
   // VIP CLIENTS
   // ------------------------------------------------------

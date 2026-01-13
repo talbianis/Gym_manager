@@ -24,4 +24,20 @@ class DailyExpenseViewModel extends ChangeNotifier {
     await DBHelper.insertExpense(expense);
     await loadExpenses(DateTime.now());
   }
+
+  Future<List<int>> getLast30DaysExpenses() async {
+    final dbData = await DBHelper.getDailyExpenseLast30Days();
+
+    List<int> finalData = [];
+
+    for (int i = 29; i >= 0; i--) {
+      final date = DateTime.now().subtract(Duration(days: i));
+      final dateString =
+          "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+
+      finalData.add(dbData[dateString] ?? 0);
+    }
+
+    return finalData;
+  }
 }

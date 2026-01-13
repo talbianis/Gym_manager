@@ -5,6 +5,7 @@ import 'package:gym_manager/screens/clients_screen.dart';
 import 'package:gym_manager/screens/expired_client.dart';
 import 'package:gym_manager/screens/revenue_screen.dart';
 import 'package:gym_manager/view_models/client_viewmodel.dart';
+import 'package:gym_manager/view_models/daili_expense_viewmodel.dart';
 import 'package:gym_manager/view_models/reveniew_viewmodel.dart';
 import 'package:gym_manager/widgets/clients_bar_chart.dart';
 import 'package:gym_manager/widgets/revenue_line_chart.dart';
@@ -18,15 +19,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _initialized = false;
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    Provider.of<ClientViewModel>(context, listen: false).loadClients();
-    Provider.of<RevenueViewModel>(
-      context,
-      listen: false,
-    ).loadTodayRevenueToCounters();
+    if (!_initialized) {
+      _initialized = true;
+
+      // Load after widget is fully mounted
+      Future.microtask(() {
+        Provider.of<ClientViewModel>(context, listen: false).loadClients();
+        Provider.of<RevenueViewModel>(
+          context,
+          listen: false,
+        ).loadTodayRevenueToCounters();
+      });
+    }
   }
 
   @override
@@ -195,22 +204,41 @@ class _HomeScreenState extends State<HomeScreen> {
                             BoxShadow(color: Colors.black12, blurRadius: 6),
                           ],
                         ),
-                        child: Consumer<RevenueViewModel>(
-                          builder: (context, revVM, child) =>
-                              FutureBuilder<List<int>>(
-                                future: revVM.getLast30DaysRevenue(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  return RevenueLineChart(
-                                    revenueData: snapshot.data!,
-                                  );
-                                },
-                              ),
-                        ),
+                        child:
+                            Consumer2<RevenueViewModel, DailyExpenseViewModel>(
+                              builder: (context, revVM, expVM, child) =>
+                                  FutureBuilder<List<List<int>>>(
+                                    future: Future.wait<List<int>>([
+                                      revVM.getLast30DaysRevenue(),
+                                      expVM.getLast30DaysExpenses(),
+                                    ]),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+
+                                      if (snapshot.hasError ||
+                                          !snapshot.hasData) {
+                                        return const Center(
+                                          child: Text(
+                                            'Error loading chart data',
+                                          ),
+                                        );
+                                      }
+
+                                      final revenueData = snapshot.data![0];
+                                      final expenseData = snapshot.data![1];
+
+                                      return RevenueLineChart(
+                                        revenueData: revenueData,
+                                        expenseData: expenseData,
+                                      );
+                                    },
+                                  ),
+                            ),
                       ),
                     ),
                     SizedBox(height: 12.h),
