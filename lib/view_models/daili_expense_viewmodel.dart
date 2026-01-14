@@ -24,6 +24,13 @@ class DailyExpenseViewModel extends ChangeNotifier {
     await DBHelper.insertExpense(expense);
     await loadExpenses(DateTime.now());
   }
+  // In DailyExpenseViewModel class, add this method after addExpense method
+
+  // حذف مصروف
+  Future<void> deleteExpense(int expenseId, DateTime date) async {
+    await DBHelper.deleteExpense(expenseId);
+    await loadExpenses(date);
+  }
 
   Future<List<int>> getLast30DaysExpenses() async {
     final dbData = await DBHelper.getDailyExpenseLast30Days();

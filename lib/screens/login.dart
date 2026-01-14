@@ -17,6 +17,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isCheckingLogin = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Check if user is already logged in when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkIfAlreadyLoggedIn();
+    });
+  }
+
+  Future<void> _checkIfAlreadyLoggedIn() async {
+    setState(() => _isCheckingLogin = true);
+
+    final viewModel = context.read<LoginViewModel>();
+
+    // If initial check not done yet, do it now
+    if (!viewModel.initialCheckDone) {
+      await viewModel.checkLoggedInUser();
+    }
+
+    // If user is already logged in, redirect to home
+    if (viewModel.isLoggedIn && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => HomeScreen()),
+      );
+    }
+
+    setState(() => _isCheckingLogin = false);
+  }
 
   @override
   void dispose() {
@@ -43,6 +75,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // Clear error when user starts typing
+  void _clearError() {
+    final viewModel = context.read<LoginViewModel>();
+    if (viewModel.errorMessage != null) {
+      viewModel.clearError();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +100,29 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(24.0),
               child: Consumer<LoginViewModel>(
                 builder: (context, viewModel, child) {
+                  // Show loading while checking initial login status
+                  if (_isCheckingLogin) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                          height: 250.h,
+                          image: AssetImage('assets/images/icon_app.png'),
+                        ),
+                        SizedBox(height: 30.h),
+                        CircularProgressIndicator(color: Colors.white),
+                        SizedBox(height: 20.h),
+                        Text(
+                          'Checking login status...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+
                   return Form(
                     key: _formKey,
                     child: Column(
@@ -112,6 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     TextFormField(
                                       cursorColor: AppColor.secondcolor,
                                       controller: _usernameController,
+                                      onChanged: (_) => _clearError(),
                                       decoration: InputDecoration(
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -147,6 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     TextFormField(
                                       controller: _passwordController,
                                       obscureText: _obscurePassword,
+                                      onChanged: (_) => _clearError(),
                                       decoration: InputDecoration(
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -262,6 +327,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 ),
                                               ),
                                       ),
+                                    ),
+
+                                    // Optional: "Remember me" checkbox
+                                    const SizedBox(height: 15),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.info_outline,
+                                          color: Colors.grey,
+                                          size: 16,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          'You will stay logged in until you logout',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

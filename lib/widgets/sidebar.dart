@@ -210,15 +210,10 @@ class SideBar extends StatelessWidget {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (context) => CustomDialog(
-                        title: 'Log Out',
-                        message: 'Are you sure you want to log out?',
-                      ),
+                      builder: (context) => LogoutDialog(),
                     );
                   },
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => LoginScreen()),
+
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

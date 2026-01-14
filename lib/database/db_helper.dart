@@ -31,7 +31,7 @@ class DBHelper {
     return await dbFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 5,
+        version: 6,
         onCreate: (db, version) async {
           await _createClientsTable(db);
           await _createRevenueTable(db);
@@ -176,13 +176,14 @@ class DBHelper {
   // ------------------------------------------------------
   static Future<void> _createUsersTable(Database db) async {
     await db.execute("""
-      CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        created_at TEXT NOT NULL
-      )
-    """);
+    CREATE TABLE users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      is_logged_in INTEGER DEFAULT 0
+    )
+  """);
   }
 
   static Future<void> _createDefaultAdmin(Database db) async {
@@ -196,6 +197,7 @@ class DBHelper {
         'username': 'ali',
         'password_hash': _hashPassword('ali2026'),
         'created_at': DateTime.now().toIso8601String(),
+        'is_logged_in': 0,
       });
     }
   }
@@ -212,6 +214,47 @@ class DBHelper {
 
     if (result.isEmpty) return null;
     return User.fromMap(result.first);
+  }
+
+  // ADD THESE NEW METHODS:
+
+  // Get current logged in user
+  static Future<User?> getLoggedInUser() async {
+    final db = await database;
+
+    final result = await db.query(
+      'users',
+      where: 'is_logged_in = ?',
+      whereArgs: [1],
+      limit: 1,
+    );
+
+    if (result.isEmpty) return null;
+    return User.fromMap(result.first);
+  }
+
+  // Set user as logged in
+  static Future<void> setUserLoggedIn(int userId, bool isLoggedIn) async {
+    final db = await database;
+
+    // First, set all users to logged out
+    await db.update('users', {'is_logged_in': 0});
+
+    // Then set specific user as logged in if needed
+    if (isLoggedIn) {
+      await db.update(
+        'users',
+        {'is_logged_in': 1},
+        where: 'id = ?',
+        whereArgs: [userId],
+      );
+    }
+  }
+
+  // Logout all users
+  static Future<void> logoutAllUsers() async {
+    final db = await database;
+    await db.update('users', {'is_logged_in': 0});
   }
 
   static String _hashPassword(String password) {
@@ -239,6 +282,7 @@ class DBHelper {
       'username': username,
       'password_hash': passwordHash,
       'created_at': DateTime.now().toIso8601String(),
+      'is_logged_in': 0,
     });
   }
 
@@ -319,6 +363,12 @@ class DBHelper {
     );
 
     return (result.first['total'] ?? 0) as int;
+  }
+  // In DBHelper class, add this method after getTotalExpensesByDate method
+
+  static Future<int> deleteExpense(int id) async {
+    final db = await database;
+    return await db.delete('daily_expenses', where: 'id = ?', whereArgs: [id]);
   }
 
   // ------------------------------------------------------

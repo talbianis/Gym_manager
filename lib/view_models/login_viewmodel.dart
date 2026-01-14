@@ -6,11 +6,41 @@ class LoginViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   User? _currentUser;
+  bool _initialCheckDone = false;
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   User? get currentUser => _currentUser;
   bool get isLoggedIn => _currentUser != null;
+  bool get initialCheckDone => _initialCheckDone;
+
+  LoginViewModel() {
+    // Initialize by checking if user is already logged in
+    checkLoggedInUser();
+  }
+
+  // Check if user is already logged in from previous session
+  Future<void> checkLoggedInUser() async {
+    if (_initialCheckDone) return;
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final user = await DBHelper.getLoggedInUser();
+      if (user != null) {
+        _currentUser = user;
+        print('User ${user.username} is already logged in');
+      }
+    } catch (e) {
+      print('Error checking logged in user: $e');
+      // If there's an error (like column doesn't exist yet), just continue
+    } finally {
+      _isLoading = false;
+      _initialCheckDone = true;
+      notifyListeners();
+    }
+  }
 
   // Login function
   Future<bool> login(String username, String password) async {
@@ -30,6 +60,10 @@ class LoginViewModel extends ChangeNotifier {
 
       if (user != null) {
         _currentUser = user;
+
+        // Save login state to database
+        await DBHelper.setUserLoggedIn(user.id!, true);
+
         _errorMessage = null;
         _isLoading = false;
         notifyListeners();
@@ -89,6 +123,14 @@ class LoginViewModel extends ChangeNotifier {
 
       // Register user
       await DBHelper.registerUser(username.trim(), password);
+
+      // Auto-login after registration
+      final user = await DBHelper.loginUser(username.trim(), password);
+      if (user != null) {
+        _currentUser = user;
+        await DBHelper.setUserLoggedIn(user.id!, true);
+      }
+
       _errorMessage = null;
       _isLoading = false;
       notifyListeners();
@@ -102,7 +144,16 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   // Logout
-  void logout() {
+  Future<void> logout() async {
+    try {
+      if (_currentUser != null) {
+        // Clear login state from database
+        await DBHelper.setUserLoggedIn(_currentUser!.id!, false);
+      }
+    } catch (e) {
+      print('Error during logout: $e');
+    }
+
     _currentUser = null;
     _errorMessage = null;
     notifyListeners();
@@ -152,5 +203,10 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  // Force check login status (useful when coming back to app)
+  Future<void> refreshLoginStatus() async {
+    await checkLoggedInUser();
   }
 }

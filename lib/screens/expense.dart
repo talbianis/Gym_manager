@@ -118,6 +118,35 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
   }
 
+  // ---------------- DELETE EXPENSE ----------------
+  Future<void> _deleteExpense(int expenseId, String title) async {
+    bool? confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Delete Expense"),
+        content: Text("Are you sure you want to delete '$title'?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("Delete", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await Provider.of<DailyExpenseViewModel>(
+        context,
+        listen: false,
+      ).deleteExpense(expenseId, selectedDate);
+    }
+  }
+
   // ---------------- UI ----------------
   @override
   Widget build(BuildContext context) {
@@ -219,7 +248,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
               SizedBox(height: 20.h),
 
-              // ---------- LIST ----------
+              // ---------- EXPENSES LIST ----------
               Expanded(
                 child: vm.isLoading
                     ? Center(child: CircularProgressIndicator())
@@ -228,20 +257,89 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     : ListView.builder(
                         itemCount: vm.expenses.length,
                         itemBuilder: (context, index) {
-                          final e = vm.expenses[index];
-                          return Card(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 20.w,
-                              vertical: 8.h,
+                          final expense = vm.expenses[index];
+                          return Dismissible(
+                            key: Key(expense.id.toString()),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                                size: 30.sp,
+                              ),
                             ),
-                            child: ListTile(
-                              leading: Icon(Icons.money_off, color: Colors.red),
-                              title: Text(e.title),
-                              trailing: Text(
-                                "${e.amount} DA",
-                                style: TextStyle(
+                            confirmDismiss: (direction) async {
+                              return await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("Delete Expense"),
+                                  content: Text(
+                                    "Are you sure you want to delete '${expense.title}'?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: Text("Cancel"),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            onDismissed: (direction) async {
+                              await Provider.of<DailyExpenseViewModel>(
+                                context,
+                                listen: false,
+                              ).deleteExpense(expense.id!, selectedDate);
+                            },
+                            child: Card(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 20.w,
+                                vertical: 8.h,
+                              ),
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.money_off,
                                   color: Colors.red,
-                                  fontWeight: FontWeight.bold,
+                                ),
+                                title: Text(expense.title),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "${expense.amount} DA",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.sp,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.delete_outline,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () => _deleteExpense(
+                                        expense.id!,
+                                        expense.title,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -249,14 +347,32 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         },
                       ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => SummaryScreen()),
-                  );
-                },
-                child: Text('summary'),
+              SizedBox(height: 10.h),
+              // ---------- SUMMARY BUTTON ----------
+              Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColor.mainColor,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30.w,
+                      vertical: 15.h,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SummaryScreen()),
+                    );
+                  },
+                  child: Text(
+                    'View Summary',
+                    style: TextStyle(
+                      color: AppColor.whitecolor,
+                      fontSize: 18.sp,
+                    ),
+                  ),
+                ),
               ),
             ],
           );

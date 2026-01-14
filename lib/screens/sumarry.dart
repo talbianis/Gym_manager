@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_manager/const/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:gym_manager/view_models/summaryviewmodel.dart'
@@ -13,7 +15,17 @@ class SummaryScreen extends StatelessWidget {
       create: (_) => SummaryViewModel()..loadSummary(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Summary'),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios, color: AppColor.whitecolor),
+          ),
+          backgroundColor: AppColor.mainColor,
+          title: Text(
+            'Summary',
+            style: TextStyle(color: AppColor.whitecolor, fontSize: 25.sp),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
@@ -41,30 +53,30 @@ class SummaryScreen extends StatelessWidget {
                       // Date Range Display
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today, size: 16),
-                          const SizedBox(width: 8),
+                          Icon(Icons.calendar_today, size: 16.sp),
+                          SizedBox(width: 8.w),
                           Text(
                             DateFormat('dd MMM yyyy').format(vm.selectedDate),
-                            style: const TextStyle(
-                              fontSize: 14,
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       // Financial Cards
                       _card(
                         title: 'Total Revenue',
                         value: vm.totalRevenue,
-                        color: Colors.green,
+                        color: AppColor.successcolor,
                         icon: Icons.arrow_upward,
                       ),
                       _card(
                         title: 'Total Expenses',
                         value: vm.totalExpenses,
-                        color: Colors.red,
+                        color: AppColor.warningcolor,
                         icon: Icons.arrow_downward,
                       ),
                       _card(
@@ -76,13 +88,43 @@ class SummaryScreen extends StatelessWidget {
                             : Icons.trending_down,
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // Date Selection
                       Center(
                         child: ElevatedButton.icon(
-                          icon: const Icon(Icons.date_range),
-                          label: const Text('Change Date'),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              AppColor.mainColor,
+                            ),
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.symmetric(
+                                horizontal: 20.w,
+                                vertical: 10.h,
+                              ),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                side: BorderSide(
+                                  color: AppColor.mainColor,
+                                  width: 2.w,
+                                ),
+                              ),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.date_range,
+                            color: AppColor.whitecolor,
+                          ),
+                          label: Text(
+                            'Change Date',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.whitecolor,
+                              fontSize: 22.sp,
+                            ),
+                          ),
                           onPressed: () async {
                             final date = await showDatePicker(
                               context: context,
@@ -117,7 +159,7 @@ class SummaryScreen extends StatelessWidget {
   }) {
     return Card(
       elevation: 2,
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 15.h),
       child: ListTile(
         leading: icon != null
             ? CircleAvatar(
@@ -129,7 +171,7 @@ class SummaryScreen extends StatelessWidget {
         trailing: Text(
           _formatCurrency(value),
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             color: color,
           ),
@@ -144,21 +186,21 @@ class SummaryScreen extends StatelessWidget {
         : 0;
 
     return Card(
-      margin: const EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 20.h),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Insights',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Row(
               children: [
-                const Icon(Icons.insights, size: 16, color: Colors.blue),
-                const SizedBox(width: 8),
+                Icon(Icons.insights, size: 16.sp, color: Colors.blue),
+                SizedBox(width: 8.w),
                 Text(
                   'Profit Margin: ${profitMargin.toStringAsFixed(1)}%',
                   style: TextStyle(
@@ -167,7 +209,7 @@ class SummaryScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 10.h),
             Row(
               children: [
                 const Icon(
@@ -175,7 +217,7 @@ class SummaryScreen extends StatelessWidget {
                   size: 16,
                   color: Colors.blue,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Text(
                   'Expense Ratio: ${(vm.totalExpenses / (vm.totalRevenue == 0 ? 1 : vm.totalRevenue)).toStringAsFixed(1)}',
                 ),

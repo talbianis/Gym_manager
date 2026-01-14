@@ -189,6 +189,11 @@ void showAddClientDialog(BuildContext context) async {
               child: const Text('Cancel'),
             ),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  AppColor.mainColor,
+                ),
+              ),
               onPressed: () async {
                 if (nameController.text.isEmpty ||
                     ageController.text.isEmpty ||
@@ -261,7 +266,10 @@ void showAddClientDialog(BuildContext context) async {
                   );
                 }
               },
-              child: const Text('Add'),
+              child: const Text(
+                'Add',
+                style: TextStyle(color: AppColor.whitecolor),
+              ),
             ),
           ],
         );

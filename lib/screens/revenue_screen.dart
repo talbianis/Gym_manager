@@ -124,14 +124,29 @@ class _RevenueScreenState extends State<RevenueScreen> {
                           );
                         },
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => ExpenseScreen()),
-                    );
-                  },
-                  child: Text('show expense '),
+                SizedBox(height: 20.h),
+                Container(
+                  width: 200.w,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        AppColor.mainColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ExpenseScreen()),
+                      );
+                    },
+                    child: Text(
+                      'show expense',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        color: AppColor.whitecolor,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
