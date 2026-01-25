@@ -11,14 +11,60 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 class DBHelper {
   static Database? _db;
 
+  static bool _isClosedIntentionally = false;
+
   // ------------------------------------------------------
-  // GET DATABASE INSTANCE
+  // GET DATABASE INSTANCE (WITH AUTO-REOPEN)
   // ------------------------------------------------------
   static Future<Database> get database async {
-    if (_db != null) return _db!;
+    if (_db != null && _db!.isOpen) {
+      return _db!;
+    }
+
+    // If database was closed intentionally (for backup/restore), reopen it
+    if (_isClosedIntentionally) {
+      print('🔄 Reopening database after intentional close...');
+      _isClosedIntentionally = false;
+    }
+
     _db = await initDB();
     return _db!;
   }
+
+  // ------------------------------------------------------
+  // CLOSE DATABASE (FOR BACKUP/RESTORE)
+  // ------------------------------------------------------
+  static Future<void> closeDatabaseForBackup() async {
+    if (_db != null && _db!.isOpen) {
+      await _db!.close();
+      _db = null;
+      _isClosedIntentionally = true;
+      print('✅ Database closed for backup/restore');
+    }
+  }
+
+  // ------------------------------------------------------
+  // REOPEN DATABASE (AFTER BACKUP/RESTORE)
+  // ------------------------------------------------------
+  static Future<void> reopenDatabase() async {
+    if (_db == null || !_db!.isOpen) {
+      _db = await initDB();
+      _isClosedIntentionally = false;
+      print('✅ Database reopened');
+    }
+  }
+
+  // ------------------------------------------------------
+  // CHECK IF DATABASE IS OPEN
+  // ------------------------------------------------------
+  static bool get isDatabaseOpen {
+    return _db != null && _db!.isOpen;
+  }
+
+  // ------------------------------------------------------
+  // GET DATABASE INSTANCE
+  // ------------------------------------------------------
+  // Removed duplicate definition of the database getter.
 
   // ------------------------------------------------------
   // INIT DATABASE

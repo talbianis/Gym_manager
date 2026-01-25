@@ -9,12 +9,16 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.8
+  file_picker: ^10.3.8
   fl_chart: ^1.1.1
   flutter:
     sdk: flutter
   flutter_screenutil: ^5.9.3
   intl: ^0.20.2
+  path: ^1.9.1
+  path_provider: ^2.1.5
   provider: ^6.1.5+1
+  shared_preferences: ^2.5.4
   sqflite: ^2.4.2
   sqflite_common_ffi: ^2.4.0
 
@@ -25,6 +29,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
+
   assets:
     - assets/images/

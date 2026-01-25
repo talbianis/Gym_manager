@@ -49,6 +49,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                 // Counters
                 ...vm.items.map(
                   (it) => CounterRow(
+                    icon: it.icon,
                     label: it.label,
                     price: it.price,
                     count: it.count,

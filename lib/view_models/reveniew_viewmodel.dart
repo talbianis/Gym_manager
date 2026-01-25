@@ -6,11 +6,32 @@ import '../database/db_helper.dart';
 class RevenueViewModel extends ChangeNotifier {
   // initial prices (customize as needed)
   final List<RevenueItem> items = [
-    RevenueItem(key: 'water', label: 'Water Bottle', price: 50),
-    RevenueItem(key: 'whey', label: 'Whey Dose', price: 250),
-    RevenueItem(key: 'session', label: 'Single Session', price: 150),
-    RevenueItem(key: 'subscription', label: 'Subscription', price: 1200),
     RevenueItem(
+      icon: Icons.local_drink,
+      key: 'water',
+      label: 'Water Bottle',
+      price: 50,
+    ),
+    RevenueItem(
+      icon: Icons.no_drinks_rounded,
+      key: 'whey',
+      label: 'Whey Dose',
+      price: 250,
+    ),
+    RevenueItem(
+      icon: Icons.sensors_outlined,
+      key: 'session',
+      label: 'Single Session',
+      price: 150,
+    ),
+    RevenueItem(
+      icon: Icons.subscriptions,
+      key: 'subscription',
+      label: 'Subscription',
+      price: 1200,
+    ),
+    RevenueItem(
+      icon: Icons.circle,
       key: 'vip_subscription',
       label: 'VIP Subscription',
       price: 2500,

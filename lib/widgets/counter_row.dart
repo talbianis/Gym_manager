@@ -6,6 +6,7 @@ class CounterRow extends StatelessWidget {
   final String label;
   final int price;
   final int count;
+  final IconData? icon;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
 
@@ -16,6 +17,7 @@ class CounterRow extends StatelessWidget {
     required this.count,
     required this.onIncrement,
     required this.onDecrement,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class CounterRow extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(flex: 1, child: SizedBox(width: 5.w)),
+            Expanded(flex: 1, child: Icon(icon, size: 20.sp)),
             Expanded(
               flex: 2,
               child: Text(

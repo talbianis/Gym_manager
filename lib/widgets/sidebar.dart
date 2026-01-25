@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
+import 'package:gym_manager/screens/backup_screen.dart';
 import 'package:gym_manager/screens/expired_client.dart';
 
 import 'package:gym_manager/screens/vipScreen.dart';
@@ -236,12 +237,20 @@ class SideBar extends StatelessWidget {
                 ),
 
                 const Spacer(),
-                Text(
-                  'By Talbi Anis',
-                  style: TextStyle(
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BackupPage()),
+                    );
+                  },
+                  child: Text(
+                    'backup & Restore',
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 SizedBox(height: 20.h),
