@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_manager/const/colors.dart';
 import 'package:gym_manager/services/backup_service.dart';
 import 'package:intl/intl.dart';
 
@@ -69,37 +71,59 @@ class _BackupPageState extends State<BackupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Backup & Restore')),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Database Info Card
-            Card(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColor.whitecolor),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: AppColor.mainColor,
+        title: Text(
+          'Backup & Restore',
+          style: TextStyle(color: AppColor.whitecolor, fontSize: 25.sp),
+        ),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Database Info Card
+          SizedBox(height: 30.h),
+          Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.storage, color: Colors.blue),
-                        SizedBox(width: 10),
+                        Icon(
+                          Icons.storage,
+                          color: AppColor.secondcolor.shade200,
+                        ),
+                        SizedBox(width: 15.w),
                         Text(
                           'Database Information',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 13.h),
                     if (_dbInfo['error'] != null)
-                      Text('Error: ${_dbInfo['error']}'),
+                      Text(
+                        'Error: ${_dbInfo['error']}',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     if (_dbInfo['exists'] == true) ...[
-                      Text('Status: ✅ Connected'),
+                      Text(
+                        'Status: ✅ Connected',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
                       Text('Size: ${_dbInfo['sizeKB']} KB'),
                       if (_dbInfo['modified'] != null)
                         Text(
@@ -114,92 +138,102 @@ class _BackupPageState extends State<BackupPage> {
                 ),
               ),
             ),
+          ),
 
-            SizedBox(height: 30),
+          SizedBox(height: 35.h),
 
-            // Backup Button
-            ElevatedButton.icon(
-              onPressed: _isProcessing ? null : _createBackup,
-              icon: Icon(Icons.backup),
-              label: Text('CREATE BACKUP'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.green,
+          // Backup Button
+          Center(
+            child: SizedBox(
+              width: 300.w,
+              height: 50.h,
+              child: ElevatedButton.icon(
+                onPressed: _isProcessing ? null : _createBackup,
+                icon: Icon(Icons.backup),
+
+                label: Text('CREATE BACKUP'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
             ),
+          ),
 
-            SizedBox(height: 15),
+          SizedBox(height: 20.h),
 
-            // Restore Button
-            ElevatedButton.icon(
-              onPressed: _isProcessing ? null : _restoreBackup,
-              icon: Icon(Icons.restore),
-              label: Text('RESTORE FROM BACKUP'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.orange,
-              ),
-            ),
-
-            SizedBox(height: 30),
-
-            // Status Display
-            if (_isProcessing)
-              Center(
-                child: Column(
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 10),
-                    Text(_statusMessage),
-                  ],
+          // Restore Button
+          Center(
+            child: SizedBox(
+              width: 300.w,
+              height: 50.h,
+              child: ElevatedButton.icon(
+                onPressed: _isProcessing ? null : _restoreBackup,
+                icon: Icon(Icons.restore),
+                label: Text('RESTORE FROM BACKUP'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.orange,
                 ),
               ),
+            ),
+          ),
 
-            if (_statusMessage.isNotEmpty && !_isProcessing)
-              Container(
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
+          SizedBox(height: 15.h),
+
+          // Status Display
+          if (_isProcessing)
+            Center(
+              child: Column(
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 10.h),
+                  Text(_statusMessage),
+                ],
+              ),
+            ),
+
+          if (_statusMessage.isNotEmpty && !_isProcessing)
+            Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: _statusMessage.contains('successfully')
+                    ? Colors.green[50]
+                    : Colors.blue[50],
+                border: Border.all(
                   color: _statusMessage.contains('successfully')
-                      ? Colors.green[50]
-                      : Colors.blue[50],
-                  border: Border.all(
-                    color: _statusMessage.contains('successfully')
-                        ? Colors.green
-                        : Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+                      ? Colors.green
+                      : Colors.blue,
                 ),
-                child: Text(_statusMessage),
+                borderRadius: BorderRadius.circular(10.r),
               ),
+              child: Text(_statusMessage),
+            ),
 
-            Spacer(),
+          Spacer(),
 
-            // Tips
-            Card(
-              color: Colors.blueGrey[50],
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '💡 Backup Tips:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey[800],
-                      ),
+          // Tips
+          Card(
+            color: Colors.blueGrey[50],
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '💡 Backup Tips:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey[800],
                     ),
-                    SizedBox(height: 5),
-                    Text('• Create backups regularly (weekly)'),
-                    Text('• Store backups in multiple locations'),
-                    Text('• Test restore process periodically'),
-                    Text('• Always backup before app updates'),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 7.h),
+                  Text('• Create backups regularly (weekly)'),
+                  Text('• Store backups in multiple locations'),
+                  Text('• Test restore process periodically'),
+                  Text('• Always backup before app updates'),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

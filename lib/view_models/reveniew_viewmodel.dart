@@ -4,6 +4,8 @@ import '../models/revenue.dart';
 import '../database/db_helper.dart';
 
 class RevenueViewModel extends ChangeNotifier {
+  int manualExtraRevenue = 0;
+
   // initial prices (customize as needed)
   final List<RevenueItem> items = [
     RevenueItem(
@@ -44,7 +46,20 @@ class RevenueViewModel extends ChangeNotifier {
   int get total {
     int sum = 0;
     for (var it in items) sum += it.total;
+    sum += manualExtraRevenue;
     return sum;
+  }
+
+  // set manual extra revenue
+  void setManualRevenue(int value) {
+    manualExtraRevenue = value;
+    notifyListeners();
+  }
+
+  // add extraa revenue
+  void addExtraRevenue(int amount) {
+    manualExtraRevenue += amount;
+    notifyListeners();
   }
 
   // count of items (still useful for UI counters)
@@ -75,6 +90,7 @@ class RevenueViewModel extends ChangeNotifier {
 
   void resetCounts() {
     for (var it in items) it.count = 0;
+    manualExtraRevenue = 0;
     notifyListeners();
   }
 
@@ -93,6 +109,7 @@ class RevenueViewModel extends ChangeNotifier {
       subscriptionSales: totalByKey('subscription'),
       wheySales: totalByKey('whey'),
       vipSubscriptionSales: totalByKey('vip_subscription'),
+      extraRevenue: manualExtraRevenue, // ✅ جديد
     );
 
     if (existing != null) {
@@ -112,29 +129,33 @@ class RevenueViewModel extends ChangeNotifier {
   Future<void> loadTodayRevenueToCounters() async {
     final today = DateTime.now();
     final existing = await DBHelper.getRevenueByDate(today);
+
     if (existing != null) {
       items.firstWhere((i) => i.key == 'water').count =
-          (existing.waterSales /
-                  items.firstWhere((i) => i.key == 'water').price)
-              .round();
+          existing.waterSales ~/
+          items.firstWhere((i) => i.key == 'water').price;
+
       items.firstWhere((i) => i.key == 'whey').count =
-          (existing.wheySales / items.firstWhere((i) => i.key == 'whey').price)
-              .round();
+          existing.wheySales ~/ items.firstWhere((i) => i.key == 'whey').price;
+
       items.firstWhere((i) => i.key == 'session').count =
-          (existing.sessionSales /
-                  items.firstWhere((i) => i.key == 'session').price)
-              .round();
+          existing.sessionSales ~/
+          items.firstWhere((i) => i.key == 'session').price;
+
       items.firstWhere((i) => i.key == 'subscription').count =
-          (existing.subscriptionSales /
-                  items.firstWhere((i) => i.key == 'subscription').price)
-              .round();
+          existing.subscriptionSales ~/
+          items.firstWhere((i) => i.key == 'subscription').price;
+
       items.firstWhere((i) => i.key == 'vip_subscription').count =
-          (existing.vipSubscriptionSales /
-                  items.firstWhere((i) => i.key == 'vip_subscription').price)
-              .round();
+          existing.vipSubscriptionSales ~/
+          items.firstWhere((i) => i.key == 'vip_subscription').price;
+
+      // ✅ هذا السطر المهم
+      manualExtraRevenue = existing.extraRevenue;
     } else {
       resetCounts();
     }
+
     notifyListeners();
   }
 

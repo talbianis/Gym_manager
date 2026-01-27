@@ -13,14 +13,19 @@ class RevenueScreen extends StatefulWidget {
 
 class _RevenueScreenState extends State<RevenueScreen> {
   DateTime selectedDate = DateTime.now();
+  final TextEditingController _extraController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    Provider.of<RevenueViewModel>(
-      context,
-      listen: false,
-    ).loadTodayRevenueToCounters();
+
+    final vm = Provider.of<RevenueViewModel>(context, listen: false);
+
+    vm.loadTodayRevenueToCounters().then((_) {
+      _extraController.text = vm.manualExtraRevenue == 0
+          ? ""
+          : vm.manualExtraRevenue.toString();
+    });
   }
 
   @override
@@ -57,8 +62,63 @@ class _RevenueScreenState extends State<RevenueScreen> {
                     onDecrement: () => vm.decrement(it.key),
                   ),
                 ),
+                SizedBox(height: 25.h),
 
-                SizedBox(height: 40.h),
+                // EXTRA REVENUE
+                Container(
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    color: AppColor.whitecolor,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Extra Revenue",
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      TextField(
+                        controller: _extraController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: "Enter extra amount (DA)",
+                          prefixIcon: Icon(Icons.add_circle_outline),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              final amount = int.tryParse(
+                                _extraController.text,
+                              );
+                              if (amount != null && amount > 0) {
+                                vm.addExtraRevenue(amount);
+                                _extraController.clear();
+                              }
+                            },
+                          ),
+
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.r),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        onSubmitted: (value) {
+                          final amount = int.tryParse(value);
+                          if (amount != null && amount > 0) {
+                            vm.addExtraRevenue(amount); // 👈 ADD not SET
+                            _extraController.clear(); // 👈 clear field
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
 
                 // TOTAL
                 Container(

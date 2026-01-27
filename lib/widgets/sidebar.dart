@@ -247,13 +247,13 @@ class SideBar extends StatelessWidget {
                   child: Text(
                     'backup & Restore',
                     style: TextStyle(
-                      fontSize: 22.sp,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
                 ),
-                SizedBox(height: 20.h),
+                Text('V1.00', style: TextStyle(color: Colors.white70)),
               ],
             ),
           ),

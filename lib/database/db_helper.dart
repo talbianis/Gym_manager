@@ -77,7 +77,7 @@ class DBHelper {
     return await dbFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 6,
+        version: 7,
         onCreate: (db, version) async {
           await _createClientsTable(db);
           await _createRevenueTable(db);
@@ -96,6 +96,11 @@ class DBHelper {
           }
           if (oldVersion < 5) {
             await _createDailyExpensesTable(db);
+          }
+          if (oldVersion < 7) {
+            await db.execute(
+              "ALTER TABLE revenues ADD COLUMN extra_revenue INTEGER DEFAULT 0",
+            );
           }
         },
       ),
@@ -120,17 +125,18 @@ class DBHelper {
 
   static Future<void> _createRevenueTable(Database db) async {
     await db.execute("""
-      CREATE TABLE revenues (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT,
-        water_sales INTEGER DEFAULT 0,
-        session_sales INTEGER DEFAULT 0,
-        subscription_sales INTEGER DEFAULT 0,
-        whey_sales INTEGER DEFAULT 0,
-        vip_subscription_sales INTEGER DEFAULT 0,
-        total INTEGER DEFAULT 0
-      )
-    """);
+    CREATE TABLE revenues (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT,
+      water_sales INTEGER DEFAULT 0,
+      session_sales INTEGER DEFAULT 0,
+      subscription_sales INTEGER DEFAULT 0,
+      whey_sales INTEGER DEFAULT 0,
+      vip_subscription_sales INTEGER DEFAULT 0,
+      extra_revenue INTEGER DEFAULT 0, -- ✅ NEW
+      total INTEGER DEFAULT 0
+    )
+  """);
   }
 
   static Future<Map<String, int>> getDailyRevenueLast30Days() async {
