@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:gym_manager/models/auth.dart';
+import 'package:gym_manager/models/client_payment.dart';
 import 'package:gym_manager/models/needs.dart';
 import 'package:gym_manager/models/vipclient.dart';
 import 'package:gym_manager/models/revenue.dart';
+
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DBHelper {
@@ -39,7 +41,6 @@ class DBHelper {
       await _db!.close();
       _db = null;
       _isClosedIntentionally = true;
-      print('✅ Database closed for backup/restore');
     }
   }
 
@@ -50,7 +51,6 @@ class DBHelper {
     if (_db == null || !_db!.isOpen) {
       _db = await initDB();
       _isClosedIntentionally = false;
-      print('✅ Database reopened');
     }
   }
 
@@ -85,6 +85,7 @@ class DBHelper {
           await _createUsersTable(db);
           await _createDailyExpensesTable(db);
           await _createDefaultAdmin(db);
+          await _createClientPaymentsTable(db);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
           if (oldVersion < 2) {
@@ -175,6 +176,39 @@ class DBHelper {
     }
 
     return data;
+  }
+
+  //client payments table
+  static Future<void> _createClientPaymentsTable(Database db) async {
+    await db.execute("""
+    CREATE TABLE client_payments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      client_id INTEGER NOT NULL,
+      date TEXT NOT NULL,
+      amount INTEGER NOT NULL,
+      subscription_type TEXT,
+      note TEXT,
+      FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+    )
+  """);
+  }
+
+  static Future<int> insertClientPayment(ClientPayment payment) async {
+    final db = await database;
+    return await db.insert('client_payments', payment.toMap());
+  }
+
+  static Future<List<ClientPayment>> getPaymentsByClient(int clientId) async {
+    final db = await database;
+
+    final result = await db.query(
+      'client_payments',
+      where: 'client_id = ?',
+      whereArgs: [clientId],
+      orderBy: 'date DESC',
+    );
+
+    return result.map((e) => ClientPayment.fromMap(e)).toList();
   }
 
   // ------------------------------------------------------

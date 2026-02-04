@@ -410,6 +410,7 @@ class _ClieentlistState extends State<Clieentlist> {
                     entry,
                   );
 
+                  if (!context.mounted) return;
                   Navigator.pop(context);
 
                   if (success) {
@@ -474,6 +475,7 @@ class _ClieentlistState extends State<Clieentlist> {
                 days,
               );
 
+              if (!context.mounted) return;
               Navigator.pop(context);
 
               if (success) {
@@ -554,6 +556,7 @@ class _ClieentlistState extends State<Clieentlist> {
 
               final success = await viewModel.updateVipClient(updatedClient);
 
+              if (!context.mounted) return;
               Navigator.pop(context);
 
               if (success) {
@@ -596,6 +599,7 @@ class _ClieentlistState extends State<Clieentlist> {
             onPressed: () async {
               final success = await viewModel.deleteVipClient(client.id!);
 
+              if (!context.mounted) return;
               Navigator.pop(context);
 
               if (success) {

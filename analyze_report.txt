@@ -1,0 +1,100 @@
+﻿Analyzing gym_manager...                                        
+
+   info - The imported package 'crypto' isn't a dependency of the importing package - lib\database\db_helper.dart:2:8 - depend_on_referenced_packages
+   info - The import of 'package:sqflite/sqflite.dart' is unnecessary because all of the used elements are also provided by the import of 'package:sqflite_common_ffi/sqflite_ffi.dart' - lib\database\db_helper.dart:10:8 - unnecessary_import
+   info - Don't invoke 'print' in production code - lib\database\db_helper.dart:28:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\database\db_helper.dart:44:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\database\db_helper.dart:55:7 - avoid_print
+   info - The import of 'dart:ui' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\models\vipclient.dart:2:8 - unnecessary_import
+   info - Constructors for public widgets should have a named 'key' parameter - lib\screens\backup_screen.dart:7:7 - use_key_in_widget_constructors
+   info - Invalid use of a private type in a public API - lib\screens\backup_screen.dart:9:3 - library_private_types_in_public_api
+   info - Unnecessary use of multiple underscores - lib\screens\clientpayment.dart:52:35 - unnecessary_underscores
+   info - Constructors for public widgets should have a named 'key' parameter - lib\screens\clients_screen.dart:14:7 - use_key_in_widget_constructors
+   info - Invalid use of a private type in a public API - lib\screens\clients_screen.dart:16:3 - library_private_types_in_public_api
+   info - The 'child' argument should be last in widget constructor invocations - lib\screens\clients_screen.dart:151:15 - sort_child_properties_last
+   info - Constructors for public widgets should have a named 'key' parameter - lib\screens\expense.dart:9:7 - use_key_in_widget_constructors
+   info - Statements in an if should be enclosed in a block - lib\screens\expense.dart:99:17 - curly_braces_in_flow_control_structures
+   info - The 'child' argument should be last in widget constructor invocations - lib\screens\expense.dart:171:9 - sort_child_properties_last
+   info - The 'child' argument should be last in widget constructor invocations - lib\screens\expense.dart:211:23 - sort_child_properties_last
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\expired_client.dart:124:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\expired_client.dart:156:62 - deprecated_member_use
+   info - The file name 'homeScreen.dart' isn't a lower_case_with_underscores identifier - lib\screens\homeScreen.dart:1:1 - file_names
+   info - Constructors for public widgets should have a named 'key' parameter - lib\screens\homeScreen.dart:16:7 - use_key_in_widget_constructors
+   info - Use interpolation to compose strings and values - lib\screens\homeScreen.dart:181:51 - prefer_interpolation_to_compose_strings
+   info - Parameter 'key' could be a super parameter - lib\screens\login.dart:9:9 - use_super_parameters
+   info - Unnecessary instance of 'Container' - lib\screens\login.dart:132:25 - avoid_unnecessary_containers
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\screens\login.dart:162:34 - sized_box_for_whitespace
+   info - Constructors for public widgets should have a named 'key' parameter - lib\screens\revenue_screen.dart:9:7 - use_key_in_widget_constructors
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\screens\revenue_screen.dart:190:17 - sized_box_for_whitespace
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\revenue_screen.dart:194:40 - deprecated_member_use
+   info - Constructors for public widgets should have a named 'key' parameter - lib\screens\splashscree.dart:9:7 - use_key_in_widget_constructors
+   info - Invalid use of a private type in a public API - lib\screens\splashscree.dart:11:3 - library_private_types_in_public_api
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\sumarry.dart:97:46 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\sumarry.dart:100:38 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\sumarry.dart:106:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\sumarry.dart:166:40 - deprecated_member_use
+   info - The file name 'vipScreen.dart' isn't a lower_case_with_underscores identifier - lib\screens\vipScreen.dart:1:1 - file_names
+   info - Parameter 'key' could be a super parameter - lib\screens\vipScreen.dart:17:9 - use_super_parameters
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\screens\vipScreen.dart:193:34 - deprecated_member_use
+   info - Constructors for public widgets should have a named 'key' parameter - lib\services\authlog.dart:8:7 - use_key_in_widget_constructors
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:24:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:36:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:61:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:86:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:94:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:106:7 - avoid_print
+   info - The 'child' argument should be last in widget constructor invocations - lib\services\backup_service.dart:150:15 - sort_child_properties_last
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:181:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:197:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:205:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:223:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:225:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:228:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:285:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\backup_service.dart:288:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\view_models\login_viewmodel.dart:33:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\view_models\login_viewmodel.dart:36:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\view_models\login_viewmodel.dart:154:7 - avoid_print
+   info - Statements in a for should be enclosed in a block - lib\view_models\reveniew_viewmodel.dart:48:27 - curly_braces_in_flow_control_structures
+   info - Statements in a for should be enclosed in a block - lib\view_models\reveniew_viewmodel.dart:92:27 - curly_braces_in_flow_control_structures
+   info - Don't invoke 'print' in production code - lib\view_models\reveniew_viewmodel.dart:124:5 - avoid_print
+   info - The type name 'revenuview' isn't an UpperCamelCase identifier - lib\view_models\revenueview.dart:5:7 - camel_case_types
+   info - Parameter 'key' could be a super parameter - lib\widgets\add_client_dialog.dart:11:9 - use_super_parameters
+   info - The 'child' argument should be last in widget constructor invocations - lib\widgets\add_client_dialog.dart:98:45 - sort_child_properties_last
+   info - Parameter 'key' could be a super parameter - lib\widgets\client_list.dart:10:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\widgets\client_list_item.dart:17:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\client_list_item.dart:57:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\client_list_item.dart:86:44 - deprecated_member_use
+   info - The 'child' argument should be last in widget constructor invocations - lib\widgets\client_list_item.dart:127:21 - sort_child_properties_last
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\clients_bar_chart.dart:27:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\clients_bar_chart.dart:121:40 - deprecated_member_use
+   info - 'swapAnimationDuration' is deprecated and shouldn't be used. Please use [duration] instead - lib\widgets\clients_bar_chart.dart:149:15 - deprecated_member_use
+   info - 'swapAnimationCurve' is deprecated and shouldn't be used. Please use [curve] instead - lib\widgets\clients_bar_chart.dart:150:15 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\clients_bar_chart.dart:181:55 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\widgets\counter_row.dart:13:9 - use_super_parameters
+   info - Unnecessary braces in a string interpolation - lib\widgets\counter_row.dart:47:18 - unnecessary_brace_in_string_interps
+   info - Parameter 'key' could be a super parameter - lib\widgets\empty_searchstate.dart:7:9 - use_super_parameters
+   info - The file name 'floating_searchButonn.dart' isn't a lower_case_with_underscores identifier - lib\widgets\floating_searchButonn.dart:1:1 - file_names
+   info - Parameter 'key' could be a super parameter - lib\widgets\floating_searchButonn.dart:6:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\widgets\loading_state.dart:5:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\widgets\no_clientstate.dart:6:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\widgets\normal_appbar.dart:8:9 - use_super_parameters
+   info - The file name 'revenue_Card.dart' isn't a lower_case_with_underscores identifier - lib\widgets\revenue_Card.dart:1:1 - file_names
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\revenue_line_chart.dart:218:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\revenue_line_chart.dart:290:45 - deprecated_member_use
+   info - Parameter 'key' could be a super parameter - lib\widgets\search_appbar.dart:9:9 - use_super_parameters
+   info - Constructors for public widgets should have a named 'key' parameter - lib\widgets\sidebar.dart:13:7 - use_key_in_widget_constructors
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\widgets\sidebar.dart:16:12 - sized_box_for_whitespace
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\sidebar.dart:58:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\widgets\snakbar.dart:67:37 - deprecated_member_use
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\widgets\snakbar.dart:85:15 - sized_box_for_whitespace
+   info - Constructors for public widgets should have a named 'key' parameter - lib\widgets\stat_card.dart:9:9 - use_key_in_widget_constructors
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:292:32 - deprecated_member_use
+   info - Unnecessary empty statement - lib\widgets\vip\clieentlist.dart:369:21 - empty_statements
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:377:36 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:389:36 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:457:32 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:464:32 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:541:32 - deprecated_member_use
+   info - 'MaterialStateProperty' is deprecated and shouldn't be used. Use WidgetStateProperty instead. Moved to the Widgets layer to make code available outside of Material. This feature was deprecated after v3.19.0-0.3.pre - lib\widgets\vip\clieentlist.dart:592:32 - deprecated_member_use
+

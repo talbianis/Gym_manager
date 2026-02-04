@@ -78,11 +78,13 @@ class BackupService {
       );
 
       // Show success dialog
+      if (!context.mounted) return false;
       _showBackupSuccessDialog(context, backupFile.path);
 
       return true;
     } catch (e) {
       print('❌ Backup failed: $e');
+      if (!context.mounted) return false;
       _showErrorDialog(context, 'Backup failed: $e');
       return false;
     } finally {
@@ -123,6 +125,7 @@ class BackupService {
       }
 
       // Show confirmation dialog
+      if (!context.mounted) return false;
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
@@ -184,6 +187,7 @@ class BackupService {
 
       if (restoreSuccess) {
         // Show success dialog
+        if (!context.mounted) return false;
         _showRestoreSuccessDialog(context);
         return true;
       }
@@ -191,6 +195,7 @@ class BackupService {
       return false;
     } catch (e) {
       print('❌ Restore failed: $e');
+      if (!context.mounted) return false;
       _showErrorDialog(context, 'Restore failed: $e');
       return false;
     } finally {

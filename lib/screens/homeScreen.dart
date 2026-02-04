@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Load after widget is fully mounted
       Future.microtask(() {
+        if (!mounted) return;
         Provider.of<ClientViewModel>(context, listen: false).loadClients();
         Provider.of<RevenueViewModel>(
           context,

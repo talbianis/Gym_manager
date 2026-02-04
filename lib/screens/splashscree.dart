@@ -29,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await loginVM.checkLoggedInUser();
 
     // Navigate based on login status
+    if (!mounted) return;
     if (loginVM.isLoggedIn) {
       Navigator.pushReplacement(
         context,

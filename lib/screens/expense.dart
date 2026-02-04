@@ -109,6 +109,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 listen: false,
               ).addExpense(expense);
 
+              if (!mounted) return;
               Navigator.pop(context);
               _loadExpenses();
             },
@@ -140,6 +141,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
 
     if (confirm == true) {
+      if (!mounted) return;
       await Provider.of<DailyExpenseViewModel>(
         context,
         listen: false,

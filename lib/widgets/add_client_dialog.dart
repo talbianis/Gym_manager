@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/widgets/snakbar.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
   final _phoneController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
+
   String _subscriptionType = "1 Month";
 
   @override
@@ -110,9 +112,10 @@ class _AddClientDialogState extends State<AddClientDialog> {
         ),
         ElevatedButton(
           child: Text("Add"),
-          onPressed: () {
+          onPressed: () async {
             if (_nameController.text.isEmpty || _phoneController.text.isEmpty) {
               CustomSnackBar.showError(context, "Please fill all fields");
+
               return Navigator.pop(context);
             }
 
@@ -129,6 +132,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
               listen: false,
             ).addClient(newClient);
             CustomSnackBar.showSuccess(context, 'Client added successfully');
+
             Navigator.pop(context);
           },
         ),

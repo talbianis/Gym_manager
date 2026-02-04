@@ -152,6 +152,7 @@ class DialogUtils {
                     listen: false,
                   ).addVipClient(client);
 
+                  if (!context.mounted) return;
                   Navigator.pop(context);
 
                   if (success) {

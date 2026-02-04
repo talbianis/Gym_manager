@@ -24,12 +24,14 @@ void main() {
         ChangeNotifierProvider(create: (_) => DailyExpenseViewModel()),
         ChangeNotifierProvider(create: (_) => SummaryViewModel()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

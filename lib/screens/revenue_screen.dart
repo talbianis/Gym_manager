@@ -177,6 +177,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                       ? null
                       : () async {
                           await vm.saveTodayRevenue();
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: Colors.green,

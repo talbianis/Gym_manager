@@ -13,6 +13,7 @@ dependencies:
   fl_chart: ^1.1.1
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
   flutter_screenutil: ^5.9.3
   intl: ^0.20.2
   path: ^1.9.1
@@ -32,3 +33,10 @@ flutter:
 
   assets:
     - assets/images/
+
+flutter_launcher_icons:
+  android: false
+  ios: false
+  windows:
+    generate: true
+    image_path: "assets/images/icon_app_square_zoom70.png"

@@ -257,6 +257,7 @@ void showAddClientDialog(BuildContext context) async {
                   listen: false,
                 ).addVipClient(client);
 
+                if (!context.mounted) return;
                 Navigator.pop(context);
 
                 if (success) {

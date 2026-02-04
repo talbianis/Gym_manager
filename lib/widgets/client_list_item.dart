@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_manager/const/colors.dart';
+import 'package:gym_manager/database/db_helper.dart';
 import 'package:gym_manager/models/client.dart';
+import 'package:gym_manager/models/client_payment.dart';
+import 'package:gym_manager/screens/clientpayment.dart';
+
 import 'package:gym_manager/view_models/client_viewmodel.dart';
 import 'package:gym_manager/widgets/recharge_widget.dart';
 import 'package:intl/intl.dart';
@@ -29,94 +33,116 @@ class ClientListItem extends StatelessWidget {
     final daysLeft = client.endDate.difference(DateTime.now()).inDays;
     final statusColor = getStatusColor(daysLeft);
 
-    return Card(
-      elevation: 2,
-      margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Avatar (optional)
-            CircleAvatar(
-              radius: 26,
-              backgroundColor: statusColor.withOpacity(0.1),
-              child: Icon(Icons.person, color: statusColor, size: 30.sp),
-            ),
+    return InkWell(
+      onDoubleTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ClientPaymentsScreen(client: client),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 2,
+        margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Avatar (optional)
+              CircleAvatar(
+                radius: 26,
+                backgroundColor: statusColor.withOpacity(0.1),
+                child: Icon(Icons.person, color: statusColor, size: 30.sp),
+              ),
 
-            SizedBox(width: 12.w),
+              SizedBox(width: 12.w),
 
-            // Text section
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name
-                  Text(
-                    client.name,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  SizedBox(height: 6.h),
-
-                  // Status Pill
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 4.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      getStatusText(daysLeft),
+              // Text section
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name
+                    Text(
+                      client.name,
                       style: TextStyle(
-                        color: statusColor,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+
+                    SizedBox(height: 6.h),
+
+                    // Status Pill
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 4.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        getStatusText(daysLeft),
+                        style: TextStyle(
+                          color: statusColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 6.h),
+
+                    // Days & Phone
+                    Text("Days left: $daysLeft"),
+                    Text("Phone: ${client.phone}"),
+                    Text(
+                      "Ends: ${DateFormat('yyyy-MM-dd').format(client.endDate)}",
+                    ),
+                  ],
+                ),
+              ),
+
+              // Right side buttons
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      showRechargeDialog(client, context);
+                      await DBHelper.insertClientPayment(
+                        ClientPayment(
+                          clientId: client.id!,
+                          date: DateTime.now(),
+                          amount: 1200,
+                          // Set appropriate amount
+
+                          // Monthly / VIP
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Recharge",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.mainColor,
+                    ),
                   ),
 
-                  SizedBox(height: 6.h),
+                  SizedBox(height: 8),
 
-                  // Days & Phone
-                  Text("Days left: $daysLeft"),
-                  Text("Phone: ${client.phone}"),
-                  Text(
-                    "Ends: ${DateFormat('yyyy-MM-dd').format(client.endDate)}",
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Color(0xFFE53935)),
+                    onPressed: () => _showDeleteDialog(client, context),
                   ),
                 ],
               ),
-            ),
-
-            // Right side buttons
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => showRechargeDialog(client, context),
-                  child: Text(
-                    "Recharge",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.mainColor,
-                  ),
-                ),
-
-                SizedBox(height: 8),
-
-                IconButton(
-                  icon: Icon(Icons.delete, color: Color(0xFFE53935)),
-                  onPressed: () => _showDeleteDialog(client, context),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -140,6 +166,7 @@ class ClientListItem extends StatelessWidget {
             child: Text("Delete"),
             onPressed: () async {
               await clientVM.deleteClient(client.id!);
+              if (!ctx.mounted) return;
               Navigator.pop(ctx);
             },
           ),

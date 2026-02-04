@@ -216,6 +216,7 @@ void _showDeleteDialog(Client client, BuildContext context) {
           child: Text("Delete"),
           onPressed: () async {
             await clientVM.deleteClient(client.id!);
+            if (!ctx.mounted) return;
             Navigator.pop(ctx);
           },
         ),
