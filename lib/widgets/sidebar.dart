@@ -140,6 +140,7 @@ class SideBar extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 Divider(
                   color: AppColor.whitecolor,
                   indent: 15.w,

@@ -121,7 +121,7 @@ class RevenueViewModel extends ChangeNotifier {
     await DBHelper.insertRevenue(revenue);
 
     isSaving = false;
-    print('i succesuflu save to db ');
+
     notifyListeners();
   }
 
