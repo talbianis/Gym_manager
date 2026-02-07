@@ -119,6 +119,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: 30.h),
 
                 // TOTAL
                 Container(
